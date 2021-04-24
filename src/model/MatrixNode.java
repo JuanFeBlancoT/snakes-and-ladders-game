@@ -27,11 +27,16 @@ public class MatrixNode {
 	
 
 	public void drawBox(PApplet app) {
-		
+		app.textSize(20);
 		app.fill(255);
 		app.square(posX+globalPX, posY+globalPY, boxSize);
 		app.fill(20);
-		app.text(boxNumber, posX+40+globalPX, posY+40+globalPY);
+		if(boxNumber<10) {
+			app.text(boxNumber, posX+35+globalPX, posY+50+globalPY);
+		}else {
+			app.text(boxNumber, posX+28+globalPX, posY+50+globalPY);
+		}
+		
 	}
 
 	public int getGlobalPX() {

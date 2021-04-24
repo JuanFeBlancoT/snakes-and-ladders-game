@@ -20,7 +20,6 @@ public class Board {
 		givenPX = 0;
 		givenPY = 240;
 		givenNum = 1;
-		
 	}
 	
 	/**
