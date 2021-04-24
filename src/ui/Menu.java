@@ -1,6 +1,6 @@
 package ui;
 
-import model.Board;
+import model.GameController;
 import processing.core.PApplet;
 
 public class Menu {
@@ -15,7 +15,7 @@ public class Menu {
 	private int height;		//Windows height
 	
 	//relations
-	private Board board;
+	private GameController gameController;
 	
 	public Menu(int w, int h) {
 		
@@ -23,7 +23,7 @@ public class Menu {
 		width = w;
 		height = h;
 		
-		board = new Board();
+		gameController = new GameController();
 	}
 	
 	/**
@@ -63,30 +63,9 @@ public class Menu {
 			
 			break;
 		case 3:
-			board.drawBoard(app);
+			gameController.getBoard().drawBoard(app);
 			break;
 		}
-	}
-	
-	/**
-	* createBoard: It creates a double linked matrix with a given amount of rows and columns from type Board <br>
-	* <b> pre </b> <br>
-	* <b> pos </b> <br>
-	* @param n Number of rows that the board will have.
-	* @param m Number of columns that the board will have.
-	*/
-	public void createBoard(int n, int m) {
-		board.createMatrix(n,m);
-	}
-	
-	/**
-	* getBoard: It returns the object of type Board <br>
-	* <b> pre </b> <br>
-	* <b> pos </b> <br>
-	* @return board An object from type Board
-	*/
-	public Board getBoard() {
-		return board;
 	}
 
 	public int getScreen() {
@@ -96,7 +75,10 @@ public class Menu {
 	public void setScreen(int screen) {
 		this.screen = screen;
 	}
-	
+
+	public GameController getGameController() {
+		return gameController;
+	}
 	
 	
 }
