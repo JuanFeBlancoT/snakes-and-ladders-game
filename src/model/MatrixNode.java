@@ -8,6 +8,7 @@ public class MatrixNode {
 	private MatrixNode down;
 	private MatrixNode prev;
 	private MatrixNode next;
+	private int r,g,b;
 	
 	private int row, col;	
 	private int posX, posY, boxNumber, boxSize, globalPX, globalPY;
@@ -38,6 +39,43 @@ public class MatrixNode {
 		}
 		
 	}
+	
+
+	public int getR() {
+		return r;
+	}
+
+
+
+	public void setR(int r) {
+		this.r = r;
+	}
+
+
+
+	public int getG() {
+		return g;
+	}
+
+
+
+	public void setG(int g) {
+		this.g = g;
+	}
+
+
+
+	public int getB() {
+		return b;
+	}
+
+
+
+	public void setB(int b) {
+		this.b = b;
+	}
+
+
 
 	public int getGlobalPX() {
 		return globalPX;

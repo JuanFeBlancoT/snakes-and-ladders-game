@@ -174,6 +174,24 @@ public class Board {
 		}
 	}
 	
+	public void asignSnakesAndLatters(BoardPosLinkedList firstLinked) {
+		asignToRow(first, firstLinked);
+	}
+
+	private void asignToRow(MatrixNode current, BoardPosLinkedList firstLinked) {
+		if(current != null) {
+			asignToCol(current, firstLinked);
+			asignToRow(current.getUp(), firstLinked);
+		}
+	}
+
+	private void asignToCol(MatrixNode current, BoardPosLinkedList firstLinked) {
+		if(current != null) {
+		
+			asignToCol(current.getNext(), firstLinked);
+		}
+	}
+	
 	
 	/*private void drawCol2(PApplet app, MatrixNode firstCol) {
 		if(firstCol != null) {

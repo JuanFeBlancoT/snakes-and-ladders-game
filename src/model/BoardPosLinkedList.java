@@ -1,9 +1,11 @@
 package model;
 
 public class BoardPosLinkedList {
-
+	
+	private int type;		//Determines whether this box is an empty box or an entrance/exit from a snake or ladder 
 	private int num;
 	private boolean taken;
+	private int pairNum;
 	
 	private BoardPosLinkedList next;
 	
@@ -11,6 +13,8 @@ public class BoardPosLinkedList {
 		num = n;
 		taken = false;
 		next = null;
+		type = 0;
+		pairNum = 0;
 	}
 	
 	public int getNum() {
@@ -35,6 +39,22 @@ public class BoardPosLinkedList {
 
 	public void setTaken(boolean taken) {
 		this.taken = taken;
+	}
+
+	public int getType() {
+		return type;
+	}
+
+	public void setType(int type) {
+		this.type = type;
+	}
+
+	public int getPairNum() {
+		return pairNum;
+	}
+
+	public void setPairNum(int pairNum) {
+		this.pairNum = pairNum;
 	}
 	
 	
