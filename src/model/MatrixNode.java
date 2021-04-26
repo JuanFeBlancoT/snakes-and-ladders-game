@@ -8,8 +8,9 @@ public class MatrixNode {
 	private MatrixNode down;
 	private MatrixNode prev;
 	private MatrixNode next;
-	private int r,g,b;
+	private MatrixNode exitPair;
 	
+	private int rC, gC,bC;
 	private int row, col;	
 	private int posX, posY, boxNumber, boxSize, globalPX, globalPY;
 	
@@ -23,13 +24,17 @@ public class MatrixNode {
 		boxSize = bxs;
 		globalPX = 0;
 		globalPY = 0;
+		
+		rC = 255;
+		gC = 255;
+		bC = 255;
 	}
 	
 	
 
 	public void drawBox(PApplet app) {
 		app.textSize(20);
-		app.fill(255);
+		app.fill(rC,gC,bC);
 		app.square(posX+globalPX, posY+globalPY, boxSize);
 		app.fill(20);
 		if(boxNumber<10) {
@@ -41,41 +46,27 @@ public class MatrixNode {
 	}
 	
 
-	public int getR() {
-		return r;
+	public MatrixNode getExitPair() {
+		return exitPair;
 	}
 
 
+
+	public void setExitPair(MatrixNode exitPair) {
+		this.exitPair = exitPair;
+	}
 
 	public void setR(int r) {
-		this.r = r;
+		this.rC = r;
 	}
-
-
-
-	public int getG() {
-		return g;
-	}
-
-
 
 	public void setG(int g) {
-		this.g = g;
+		this.gC = g;
 	}
-
-
-
-	public int getB() {
-		return b;
-	}
-
-
 
 	public void setB(int b) {
-		this.b = b;
+		this.bC = b;
 	}
-
-
 
 	public int getGlobalPX() {
 		return globalPX;
@@ -140,6 +131,18 @@ public class MatrixNode {
 	public void setCol(int col) {
 		this.col = col;
 	}
+
+	public int getBoxNumber() {
+		return boxNumber;
+	}
+
+
+
+	public void setBoxNumber(int boxNumber) {
+		this.boxNumber = boxNumber;
+	}
+
+
 
 	public int getPosX() {
 		return posX;

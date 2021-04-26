@@ -1,18 +1,31 @@
 package model;
 
 import processing.core.PApplet;
+import java.util.Random;
 
 public class Board {
 	
 	//constants
 	public final static int BOXSIZE = 80;
+	//constants
+	public final static int SNAKE_ENTRANCE = 1;
+	public final static int SNAKE_EXIT = 2;
+	public final static int LADDER_ENTRANCE = 3;
+	public final static int LADDER_EXIT = 4;
 	
 	//attributes
 	private int rows,cols;
 	private int givenPX, givenPY, givenNum;
+	//
+	private int availableLadderEntrances;
+	private int availabeLadderExits;
+	private int availabaleSnakesEntrances;
+	private int availableSnakesExits;
 	
 	//relations	
 	private MatrixNode first;
+	private BoardPosLinkedList head;
+	private Random rndm;
 	
 	public Board() {
 		rows = 0;
@@ -20,6 +33,8 @@ public class Board {
 		givenPX = 0;
 		givenPY = 240;
 		givenNum = 1;
+				
+		rndm = new Random();
 	}
 	
 	/**
@@ -30,6 +45,7 @@ public class Board {
 	* @param m Number of columns that the board will have.
 	*/
 	public void createMatrix(int n, int m) {
+		createBoardPositionLinkedList(n, m);
 		rows = n;
 		cols = m;
 		first = new MatrixNode(0, 0, givenPX, givenPY, givenNum, BOXSIZE);
@@ -174,8 +190,9 @@ public class Board {
 		}
 	}
 	
-	public void asignSnakesAndLatters(BoardPosLinkedList firstLinked) {
-		asignToRow(first, firstLinked);
+	public void asignSnakesAndLatters() {
+		asignToRow(first, head);
+		
 	}
 
 	private void asignToRow(MatrixNode current, BoardPosLinkedList firstLinked) {
@@ -187,11 +204,196 @@ public class Board {
 
 	private void asignToCol(MatrixNode current, BoardPosLinkedList firstLinked) {
 		if(current != null) {
-		
+			int numberBox = current.getBoxNumber();
+			BoardPosLinkedList currentPosLinked = searchBoardPosition(numberBox);
+			
+			if(currentPosLinked.getType() == SNAKE_ENTRANCE) {
+				System.out.println("SNAKE");
+				current.setR(245);
+				current.setG(102);
+				current.setB(88);
+				MatrixNode pair = searchMatrixNode(currentPosLinked.getPairNum());
+				pair.setR(245);
+				pair.setG(157);
+				pair.setB(105);	
+
+			}else if(currentPosLinked.getType() == SNAKE_EXIT) {
+				
+			}else if(currentPosLinked.getType() == LADDER_ENTRANCE) {
+				System.out.println("LADDER");
+				current.setR(99);
+				current.setG(115);
+				current.setB(250);
+				MatrixNode pair = searchMatrixNode(currentPosLinked.getPairNum());
+				pair.setR(127);
+				pair.setG(208);
+				pair.setB(250);	
+			}else if(currentPosLinked.getType() == LADDER_EXIT) {
+				
+			}else {
+				
+			}
+			
+			
 			asignToCol(current.getNext(), firstLinked);
 		}
 	}
 	
+	public MatrixNode searchMatrixNode(int numberBox) {
+		MatrixNode searched;
+		searched = searchRow(first, numberBox);
+		return searched;
+	}
+	
+	private MatrixNode searchRow(MatrixNode current, int numberBox) {
+		MatrixNode searched = null;
+		if(current != null) {
+			searched = searchCol(current, numberBox);
+			if(searched == null) {
+				searched = searchRow(current.getUp(), numberBox);
+			}
+		}
+		return searched;
+	}
+
+	private MatrixNode searchCol(MatrixNode current, int numberBox) {
+		MatrixNode searched = null;
+		if(current != null) {
+			 if(current.getBoxNumber() == numberBox) {
+				 searched = current;
+			 }
+			 if(searched == null) {
+				 searched = searchCol(current.getNext(), numberBox);
+			 }
+		}
+		return searched;
+	}
+
+	public void createBoardPositionLinkedList(int n, int m) {
+		/*availabaleSnakesEntrances = (n*m)-(m+1);
+		availableSnakesExits = 0;
+		availableLadderEntrances = 0;
+		availabeLadderExits = 0;*/
+		
+		int num = n*m;
+		head = new BoardPosLinkedList(1);
+		createBoardPositionLinkedList(head,2,num);
+	}
+	
+	
+	private void createBoardPositionLinkedList(BoardPosLinkedList current, int currentNum, int endNum) {
+		if(currentNum<=endNum) {
+			BoardPosLinkedList nextNode = new BoardPosLinkedList(currentNum);
+			current.setNext(nextNode);
+			createBoardPositionLinkedList(nextNode, currentNum+1, endNum);
+		}
+	}
+	
+	public void createSnakePositions(int currentNumSnakes, int numSnakes, int n, int m) {
+
+		
+		if(currentNumSnakes < numSnakes) {
+
+			//selects a random entrance which can start from the first box in the second row to (n*m)-1
+			int posEntrance = rndm.nextInt((n*m)-(m+1))+(m+1);
+			BoardPosLinkedList posNodeEntrance = searchBoardPosition(posEntrance);
+			
+			if(!posNodeEntrance.isTaken()) {
+				
+				//if the node in the position of the random entrance is not taken yet, creates a random exit which can go from 1 to the number before the entrance
+				int posExit;
+				if(posEntrance%m == 0) {
+					posExit = rndm.nextInt(posEntrance-(m+1))+1;
+				}else {
+					posExit = rndm.nextInt(posEntrance-(posEntrance%m))+1;
+				}
+				
+				BoardPosLinkedList posNodeExit = searchBoardPosition(posExit);
+				
+				if(!posNodeExit.isTaken()) {
+					
+					System.out.println(posEntrance);
+					System.out.println(posExit);
+					
+					posNodeEntrance.setType(SNAKE_ENTRANCE);
+					posNodeEntrance.setTaken(true);
+					posNodeEntrance.setPairNum(posExit);
+					//
+					posNodeExit.setType(SNAKE_EXIT);
+					posNodeExit.setTaken(true);
+					currentNumSnakes++;
+					System.out.println("Done snake"+"\n");
+				}
+			}
+			createSnakePositions(currentNumSnakes, numSnakes, n, m);
+		}
+	}
+	
+	public void createLaddersPoistions(int currentLadders, int numLadders, int n, int m) {
+		
+		if(currentLadders < numLadders) {
+			
+			//select a random ladder entrance that can go from 2 to (n*m)-m
+			int posEntrance = rndm.nextInt((n*m)-(m+2))+2;
+			BoardPosLinkedList posNodeEntrance = searchBoardPosition(posEntrance);
+			
+			if(!posNodeEntrance.isTaken()) {
+				
+				//if the node in the position of the random entrance is not taken yet, creates a random exit which can go from the entrance to n*m
+				int reducedEntrance = reduceEntranceNum(posEntrance, m);
+				int minExitPos = (m-reducedEntrance)+1;
+				int posExitMin = minExitPos + posEntrance;
+				
+				int posExit = rndm.nextInt((n*m)-posExitMin)+posExitMin;
+				
+				BoardPosLinkedList posNodeExit = searchBoardPosition(posExit);
+				
+				if(!posNodeExit.isTaken()) {
+					
+					System.out.println(posEntrance);
+					System.out.println(posExit);
+					
+					posNodeEntrance.setType(LADDER_ENTRANCE);
+					posNodeEntrance.setTaken(true);
+					posNodeEntrance.setPairNum(posExit);
+					//
+					posNodeExit.setType(LADDER_EXIT);
+					posNodeExit.setTaken(true);
+					currentLadders++;
+					System.out.println("Done Ladder"+"\n");
+				}
+			}
+			createLaddersPoistions(currentLadders, numLadders, n, m);
+		}
+	}
+
+	private int reduceEntranceNum(int entranceNum, int m) {
+		if(entranceNum<=m) {
+			return entranceNum;
+		}else {
+			entranceNum -= m;
+			reduceEntranceNum(entranceNum, m);
+		}
+		return entranceNum;
+	}
+
+	private BoardPosLinkedList searchBoardPosition(int posEntrance) {
+		BoardPosLinkedList searched;
+		searched = searchBoardPosition(head, posEntrance);
+		
+		return searched;
+		
+	}
+
+	private BoardPosLinkedList searchBoardPosition(BoardPosLinkedList current, int posEntrance) {
+		BoardPosLinkedList searched;
+		if(current.getNum() == posEntrance) {
+			searched = current;
+		}else {
+			searched = searchBoardPosition(current.getNext(), posEntrance);
+		}
+		return searched;
+	}
 	
 	/*private void drawCol2(PApplet app, MatrixNode firstCol) {
 		if(firstCol != null) {
