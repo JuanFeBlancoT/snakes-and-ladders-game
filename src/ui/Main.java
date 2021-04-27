@@ -80,8 +80,8 @@ public class Main extends PApplet{
 		if(menu.getScreen() == 2 && mouseX > (WIDTH/2)-200 && mouseX < (WIDTH/2)+200 && mouseY > (HEIGHT/2)-25 && mouseY < (HEIGHT/2)+55) {
 			System.out.println("start");
 			//menu.getGameController().getBoard().createBoardPositionLinkedList(3,3);
-			menu.getGameController().createBoard(3, 3);
-			menu.getGameController().getBoard().createSpecialCells(0, 3, 3, 3);
+			menu.getGameController().createBoard(4, 4);
+			menu.getGameController().getBoard().createSpecialCells(2, 2, 4, 4);
 			//menu.getGameController().getBoard().createSnakePositions(0,2, 3, 3);
 			//menu.getGameController().getBoard().createLaddersPoistions(0,2, 3, 3);
 			menu.getGameController().getBoard().asignSnakesAndLadders();

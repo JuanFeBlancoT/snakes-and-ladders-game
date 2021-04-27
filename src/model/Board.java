@@ -22,7 +22,9 @@ public class Board {
 	private int availabaleSnakesEntrances;
 	private int availableSnakesExits;
 	private int attempts;
-	private char initialLetter;
+	
+	private char snakesAlphabeticEnum;
+	private int laddersEnumeration;
 	
 	//relations	
 	private MatrixNode first;
@@ -36,7 +38,8 @@ public class Board {
 		givenPY = 240;
 		givenNum = 1;
 		attempts = 0;
-		initialLetter = 'A';
+		snakesAlphabeticEnum = 'A';
+		laddersEnumeration = 1;
 		
 		rndm = new Random();
 	}
@@ -196,7 +199,6 @@ public class Board {
 
 	public void asignSnakesAndLadders() {
 		asignToRow(first, head);
-		
 	}
 
 	private void asignToRow(MatrixNode current, BoardPosLinkedList firstLinked) {
@@ -213,25 +215,30 @@ public class Board {
 			
 			if(currentPosLinked.getType() == SNAKE_ENTRANCE) {
 				System.out.println("SNAKE");
+				current.setIdentifier(snakesAlphabeticEnum);
 				current.setR(245);
 				current.setG(102);
 				current.setB(88);
 				MatrixNode pair = searchMatrixNode(currentPosLinked.getPairNum());
+				pair.setIdentifier(snakesAlphabeticEnum);
 				pair.setR(245);
 				pair.setG(157);
 				pair.setB(105);	
-
+				snakesAlphabeticEnum++;
 			}else if(currentPosLinked.getType() == SNAKE_EXIT) {
 				
 			}else if(currentPosLinked.getType() == LADDER_ENTRANCE) {
 				System.out.println("LADDER");
+				current.setNumericIdentifier(laddersEnumeration);
 				current.setR(99);
 				current.setG(115);
 				current.setB(250);
 				MatrixNode pair = searchMatrixNode(currentPosLinked.getPairNum());
+				pair.setNumericIdentifier(laddersEnumeration);
 				pair.setR(127);
 				pair.setG(208);
 				pair.setB(250);	
+				laddersEnumeration++;
 			}else if(currentPosLinked.getType() == LADDER_EXIT) {
 				
 			}else {
@@ -318,12 +325,16 @@ public class Board {
 				
 				//if the node in the position of the random entrance is not taken yet, creates a random exit which can go from 1 to the number before the entrance
 				int posExit;
-				if(posEntrance%m == 0) {
-					posExit = rndm.nextInt(posEntrance-(m+1))+1;
+				if(n == 2 && m == 2) {
+					posExit = 1;
 				}else {
-					posExit = rndm.nextInt(posEntrance-(posEntrance%m))+1;
+					if(posEntrance%m == 0) {
+						posExit = rndm.nextInt(posEntrance-(m+1))+1;
+					}else {
+						posExit = rndm.nextInt(posEntrance-(posEntrance%m))+1;
+					}
 				}
-				
+
 				BoardPosLinkedList posNodeExit = searchBoardPosition(posExit);
 				
 				if(!posNodeExit.isTaken()) {
@@ -359,21 +370,35 @@ public class Board {
 		if(currentLadders < numLadders  && attempts < 100) {
 			
 			//select a random ladder entrance that can go from 2 to (n*m)-m
-			int posEntrance = rndm.nextInt((n*m)-(m+2))+2;
+			int posEntrance;
+			if(n == 2 && m==2) {
+				posEntrance = 2;
+			}else {
+				posEntrance = rndm.nextInt((n*m)-(m+2))+2;
+				attempts++;
+			}
+		
 			BoardPosLinkedList posNodeEntrance = searchBoardPosition(posEntrance);
 			
 			if(!posNodeEntrance.isTaken()) {
 				//if the node in the position of the random entrance is not taken yet, creates a random exit which can go from the entrance to n*m
-				int reducedEntrance = reduceEntranceNum(posEntrance, m);
-				System.out.println("REDUCED E: "+reducedEntrance);
-				int minExitPos = (m-reducedEntrance)+1;
-				int posExitMin = minExitPos + posEntrance;
-				System.out.println("mini: "+minExitPos+".....posEn: "+posEntrance+"...posExitMin: "+posExitMin);
-				
-				int posExit = rndm.nextInt((n*m)-posExitMin)+posExitMin;
+				int posExit;
+				if(n == 2 && m==2) {
+					posExit= n*m;;
+				}else {
+					
+					int reducedEntrance = reduceEntranceNum(posEntrance, m);
+					System.out.println("REDUCED E: "+reducedEntrance);
+					int minExitPos = (m-reducedEntrance)+1;
+					int posExitMin = minExitPos + posEntrance;
+					System.out.println("mini: "+minExitPos+".....posEn: "+posEntrance+"...posExitMin: "+posExitMin);
+					
+					posExit = rndm.nextInt((n*m)-posExitMin)+posExitMin;
+					attempts++;
+				}
 				
 				BoardPosLinkedList posNodeExit = searchBoardPosition(posExit);
-				attempts++;
+				
 				if(!posNodeExit.isTaken()) {
 					
 					System.out.println("Ladder attempts:"+attempts);
@@ -409,11 +434,7 @@ public class Board {
 	}
 
 	private BoardPosLinkedList searchBoardPosition(int posEntrance) {
-		BoardPosLinkedList searched;
-		searched = searchBoardPosition(head, posEntrance);
-		
-		return searched;
-		
+		return searchBoardPosition(head, posEntrance);
 	}
 
 	private BoardPosLinkedList searchBoardPosition(BoardPosLinkedList current, int posEntrance) {

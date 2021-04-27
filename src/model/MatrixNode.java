@@ -14,6 +14,7 @@ public class MatrixNode {
 	private int row, col;	
 	private int posX, posY, boxNumber, boxSize, globalPX, globalPY;
 	private char identifier;
+	private int numericIdentifier;
 	
 	public MatrixNode(int r, int c, int px, int py, int num, int bxs) {
 		
@@ -25,10 +26,19 @@ public class MatrixNode {
 		boxSize = bxs;
 		globalPX = 0;
 		globalPY = 0;
+		numericIdentifier = 0;
+		identifier = ' ';
 		
-		rC = 255;
-		gC = 255;
-		bC = 255;
+		if(num%2 == 0) {
+			rC = 136;
+			gC = 250;
+			bC = 148;
+		}else {
+			rC = 98;
+			gC = 219;
+			bC = 106;
+		}
+		
 	}
 	
 	
@@ -39,15 +49,34 @@ public class MatrixNode {
 		app.square(posX+globalPX, posY+globalPY, boxSize);
 		app.fill(20);
 		if(boxNumber<10) {
-			app.text(boxNumber, posX+35+globalPX, posY+50+globalPY);
+			app.text(boxNumber, posX+35+globalPX, posY+45+globalPY);
 		}else {
-			app.text(boxNumber, posX+28+globalPX, posY+50+globalPY);
+			app.text(boxNumber, posX+28+globalPX, posY+45+globalPY);
+		}
+		app.textSize(15);
+		if(numericIdentifier != 0) {
+			app.text(numericIdentifier, posX+35+globalPX, posY+65+globalPY);
+		}
+		if(identifier != ' ') {
+			app.text(identifier, posX+35+globalPX, posY+65+globalPY);
 		}
 		
 	}
 	
 	
 	
+	public int getNumericIdentifier() {
+		return numericIdentifier;
+	}
+
+
+
+	public void setNumericIdentifier(int numericIdentifier) {
+		this.numericIdentifier = numericIdentifier;
+	}
+
+
+
 	public char getIdentifier() {
 		return identifier;
 	}
