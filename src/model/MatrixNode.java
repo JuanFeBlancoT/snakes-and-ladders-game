@@ -13,6 +13,7 @@ public class MatrixNode {
 	private int rC, gC,bC;
 	private int row, col;	
 	private int posX, posY, boxNumber, boxSize, globalPX, globalPY;
+	private char identifier;
 	
 	public MatrixNode(int r, int c, int px, int py, int num, int bxs) {
 		
@@ -45,6 +46,19 @@ public class MatrixNode {
 		
 	}
 	
+	
+	
+	public char getIdentifier() {
+		return identifier;
+	}
+
+
+
+	public void setIdentifier(char identifier) {
+		this.identifier = identifier;
+	}
+
+
 
 	public MatrixNode getExitPair() {
 		return exitPair;
