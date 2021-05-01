@@ -63,7 +63,17 @@ public class Menu {
 			
 			break;
 		case 3:
+			
 			gameController.getBoard().drawBoard(app);
+			app.fill(20);
+			app.noStroke();
+			app.rect(0, 780, 1200, 120);
+			//die button
+			app.fill(220);
+			app.rect(1100, 805, 70, 70);
+			app.fill(40);
+			app.text("Throw \n dice", 1115, 835);
+			app.stroke(40);
 			break;
 		}
 	}

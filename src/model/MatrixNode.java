@@ -9,12 +9,14 @@ public class MatrixNode {
 	private MatrixNode prev;
 	private MatrixNode next;
 	private MatrixNode exitPair;
+	private Player firstPlayer;
 	
 	private int rC, gC,bC;
 	private int row, col;	
 	private int posX, posY, boxNumber, boxSize, globalPX, globalPY;
 	private char identifier;
 	private int numericIdentifier;
+	private int playersInCell;
 	
 	public MatrixNode(int r, int c, int px, int py, int num, int bxs) {
 		
@@ -28,6 +30,8 @@ public class MatrixNode {
 		globalPY = 0;
 		numericIdentifier = 0;
 		identifier = ' ';
+		playersInCell = 0;
+		firstPlayer = null;
 		
 		if(num%2 == 0) {
 			rC = 136;
@@ -40,8 +44,6 @@ public class MatrixNode {
 		}
 		
 	}
-	
-	
 
 	public void drawBox(PApplet app) {
 		app.textSize(20);
@@ -60,40 +62,65 @@ public class MatrixNode {
 		if(identifier != ' ') {
 			app.text(identifier, posX+35+globalPX, posY+65+globalPY);
 		}
-		
+		drawPlayersInCell(app);
 	}
 	
+	public void drawPlayersInCell(PApplet app) {
+		if(firstPlayer != null) {
+			drawPlayersInCell(firstPlayer, app);
+		}
+	}
 	
+	private void drawPlayersInCell(Player currentPlayer, PApplet app) {
+		if(currentPlayer != null) {
+			currentPlayer.drawPlayer(app);
+			drawPlayersInCell(currentPlayer.getNext(), app);
+		}
+	}
 	
+	public void updatePlayersPositions() {
+		if(firstPlayer != null) {
+			
+		}
+	}
+
+	
+	public int getPlayersInCell() {
+		return playersInCell;
+	}
+
+	public void setPlayersInCell(int playersInCell) {
+		this.playersInCell = playersInCell;
+	}
+
+	//
+	public Player getFirstPlayer() {
+		return firstPlayer;
+	}
+
+	public void setFirstPlayer(Player firstPlayer) {
+		this.firstPlayer = firstPlayer;
+	}
+
 	public int getNumericIdentifier() {
 		return numericIdentifier;
 	}
-
-
 
 	public void setNumericIdentifier(int numericIdentifier) {
 		this.numericIdentifier = numericIdentifier;
 	}
 
-
-
 	public char getIdentifier() {
 		return identifier;
 	}
-
-
 
 	public void setIdentifier(char identifier) {
 		this.identifier = identifier;
 	}
 
-
-
 	public MatrixNode getExitPair() {
 		return exitPair;
 	}
-
-
 
 	public void setExitPair(MatrixNode exitPair) {
 		this.exitPair = exitPair;
@@ -179,13 +206,9 @@ public class MatrixNode {
 		return boxNumber;
 	}
 
-
-
 	public void setBoxNumber(int boxNumber) {
 		this.boxNumber = boxNumber;
 	}
-
-
 
 	public int getPosX() {
 		return posX;

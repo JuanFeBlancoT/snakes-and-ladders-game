@@ -80,13 +80,19 @@ public class Main extends PApplet{
 		if(menu.getScreen() == 2 && mouseX > (WIDTH/2)-200 && mouseX < (WIDTH/2)+200 && mouseY > (HEIGHT/2)-25 && mouseY < (HEIGHT/2)+55) {
 			System.out.println("start");
 			//menu.getGameController().getBoard().createBoardPositionLinkedList(3,3);
-			menu.getGameController().createBoard(4, 4);
-			menu.getGameController().getBoard().createSpecialCells(2, 2, 4, 4);
+			menu.getGameController().createBoard(5, 5);
+			menu.getGameController().getBoard().createSpecialCells(3, 3, 5, 5);
+			menu.getGameController().getBoard().createInitialPlayers(9);
 			//menu.getGameController().getBoard().createSnakePositions(0,2, 3, 3);
 			//menu.getGameController().getBoard().createLaddersPoistions(0,2, 3, 3);
 			menu.getGameController().getBoard().asignSnakesAndLadders();
-			
+			System.out.println(menu.getGameController().getBoard().getFirst().getPlayersInCell());
+			System.out.println(menu.getGameController().getBoard().getFirst().getRow()+","+menu.getGameController().getBoard().getFirst().getCol());
 			menu.setScreen(3);
+		}
+		
+		if(menu.getScreen() == 3) {
+			menu.getGameController().movePlayer();
 		}
 	}
 	

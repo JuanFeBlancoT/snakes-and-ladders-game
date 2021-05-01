@@ -1,5 +1,7 @@
 package model;
 
+import java.util.Random;
+
 public class GameController {
 	
 	//attributes
@@ -32,5 +34,16 @@ public class GameController {
 	*/
 	public Board getBoard() {
 		return board;
+	}
+	
+	public void movePlayer() {
+		int die = throwDie();
+		board.movePlayer(die);
+	}
+	
+	public int throwDie() {
+		Random rnd = new Random();
+		int dieNumber = rnd.nextInt(6)+1;
+		return dieNumber;
 	}
 }

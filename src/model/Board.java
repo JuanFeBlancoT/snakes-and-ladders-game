@@ -3,6 +3,8 @@ package model;
 import processing.core.PApplet;
 import java.util.Random;
 
+import javax.print.attribute.standard.Destination;
+
 public class Board {
 	
 	//constants
@@ -16,15 +18,12 @@ public class Board {
 	//attributes
 	private int rows,cols;
 	private int givenPX, givenPY, givenNum;
-	//
-	private int availableLadderEntrances;
-	private int availabeLadderExits;
-	private int availabaleSnakesEntrances;
-	private int availableSnakesExits;
 	private int attempts;
 	
 	private char snakesAlphabeticEnum;
 	private int laddersEnumeration;
+	private int numberPlayers;
+	private int playerTurn;
 	
 	//relations	
 	private MatrixNode first;
@@ -35,7 +34,7 @@ public class Board {
 		rows = 0;
 		cols = 0;
 		givenPX = 0;
-		givenPY = 240;
+		givenPY = 0;
 		givenNum = 1;
 		attempts = 0;
 		snakesAlphabeticEnum = 'A';
@@ -53,6 +52,7 @@ public class Board {
 	*/
 	public void createMatrix(int n, int m) {
 		createBoardPositionLinkedList(n, m);
+		givenPY = (n-1)*80;
 		rows = n;
 		cols = m;
 		first = new MatrixNode(0, 0, givenPX, givenPY, givenNum, BOXSIZE);
@@ -280,12 +280,7 @@ public class Board {
 		return searched;
 	}
 
-	public void createBoardPositionLinkedList(int n, int m) {
-		availabaleSnakesEntrances = (n*m)-(m+1);
-		availableSnakesExits = availabaleSnakesEntrances+1;
-		availableLadderEntrances = (n*m)-(m+1);
-		availabeLadderExits = availableLadderEntrances+1;
-		
+	public void createBoardPositionLinkedList(int n, int m) {		
 		int num = n*m;
 		head = new BoardPosLinkedList(1);
 		System.out.println(1);
@@ -308,6 +303,7 @@ public class Board {
 		createBoardPositionLinkedList(n,m);
 		//System.out.println("Entrada Serp: "+availabaleSnakesEntrances+". Salida serp: "+availableSnakesExits+". Entrada esca: "+availableLadderEntrances+". Salida esca: "+availabeLadderExits);
 		createSnakePositions(0, requiredSnakes, n, m, requiredLadders);
+		attempts = 0;
 		createLaddersPoistions(0, requiredLadders, n, m, requiredSnakes);
 		
 	}
@@ -447,18 +443,182 @@ public class Board {
 		
 	}
 	
-	/*private void drawCol2(PApplet app, MatrixNode firstCol) {
-		if(firstCol != null) {
-			drawRow2(app, firstCol);
-			drawCol2(app, firstCol.getNext());
+	public void createInitialPlayers(int p) {
+		numberPlayers = p;
+		int currentP = 0;
+		int px = 10;
+		int py = ((rows-1)*80)+10;  
+		if(currentP < p) {
+			Player player = new Player(first.getRow(), first.getCol(), px, py, "!", currentP+1, 0);
+			first.setFirstPlayer(player);
+			first.setPlayersInCell(first.getPlayersInCell()+1);
+			createInitialPlayers(player, currentP+1, p, px+20,py);
 		}
-		
+		playerTurn = rndm.nextInt(numberPlayers-1)+1;
 	}
 	
-	private void drawRow2(PApplet app, MatrixNode current) {
-		if(current != null) {
-			current.drawBox(app);
-			drawRow2(app, current.getUp());
+	private void createInitialPlayers(Player current, int currentP, int p, int px, int py) {
+		System.out.println(currentP);
+		if(current != null && currentP < p) {
+			if(px >= 80) {
+				px = 10;
+				py+=22;
+			}
+			System.out.println("px: "+px);
+			Player player = new Player(first.getRow(), first.getCol(), px, py, "!", currentP+1, 0);
+			current.setNext(player);
+			player.setPrev(current);
+			first.setPlayersInCell(first.getPlayersInCell()+1);
+			createInitialPlayers(current.getNext(), currentP+1, p, px+20, py);
 		}
-	}*/
+	}
+	
+	public void movePlayer(int cellsToMove) {
+		Player player = null;
+		if(first != null) {
+			player = searchPlayerInRow(first, cellsToMove);
+		}
+		
+		int finalPos = player.getCurrentPos()+cellsToMove;
+		
+		if(finalPos > rows*cols) {
+			finalPos = rows*cols;
+		}
+		
+		MatrixNode actualPlayerNode = searchMatrixNode(player.getCurrentPos());
+		MatrixNode playerDestination = searchMatrixNode(finalPos);
+		
+		//eliminate player from actual node
+		if(actualPlayerNode.getPlayersInCell() > 1) {
+			
+			if(player.getPrev() != null) {
+				player.getPrev().setNext(player.getNext());
+			}else {
+				actualPlayerNode.setFirstPlayer(player.getNext());
+			}
+			if(player.getNext() != null) {
+				player.getNext().setPrev(player.getPrev());
+			}else {
+				player.getPrev().setNext(null);
+			}
+			
+		}else if (actualPlayerNode.getPlayersInCell() == 1){
+			actualPlayerNode.setFirstPlayer(null);
+		}
+		if(actualPlayerNode.getPlayersInCell()>0) {
+			actualPlayerNode.setPlayersInCell(actualPlayerNode.getPlayersInCell()-1);
+		}
+		
+		// end eliminate player from actual node	
+		int rowP = playerDestination.getRow();
+		int colP = playerDestination.getCol();
+		int pxp =(player.getPosX()-(player.getCol()*80))+(playerDestination.getCol()*80);
+		int pyp = player.getPosY()-((playerDestination.getRow()-player.getRow())*80);
+		int tp = player.getTurn();
+		String sp = player.getSymbol();
+		int movp = player.getMovs();
+		
+		Player movedPlayer = new Player(rowP, colP, pxp, pyp, sp, tp, movp);
+
+		System.out.println("player o: "+player.getCol()+","+player.getRow());
+		System.out.println("px: "+player.getPosX()+". py: "+player.getPosY());
+		System.out.println("moved "+player.getTurn()+", "+cellsToMove);
+		
+		player = null;
+		
+		//add player to destination node
+		if(playerDestination.getFirstPlayer() == null) {
+
+			addPlayerToNode(playerDestination, movedPlayer);
+		}else {
+			addPlayerToNode(playerDestination, movedPlayer);
+		}
+		System.out.println(movedPlayer.getCol()+","+movedPlayer.getRow());
+	
+		
+		if(playerTurn < numberPlayers) {
+			playerTurn++;
+		}else {
+			playerTurn = 1;
+		}
+	}
+
+	private void addPlayerToNode(MatrixNode currentNode, Player currentPlayer) {
+		if(currentNode.getFirstPlayer() == null) {
+			currentNode.setFirstPlayer(currentPlayer);
+			currentNode.setPlayersInCell(currentNode.getPlayersInCell()+1);
+			currentPlayer.setCurrentPos(currentNode.getBoxNumber());
+			currentPlayer.setCol(currentNode.getCol());
+			currentPlayer.setRow(currentNode.getRow());
+		}else {
+			addPlayerToNode(currentNode.getFirstPlayer(), currentPlayer, currentNode.getBoxNumber(), currentNode.getRow(), currentNode.getCol());
+			currentNode.setPlayersInCell(currentNode.getPlayersInCell()+1);
+		}
+	}
+
+	private void addPlayerToNode(Player currentPlayer, Player addPlayer, int boxNum, int row, int col) {
+		if(currentPlayer.getNext() == null) {
+			currentPlayer.setNext(addPlayer);
+			addPlayer.setPrev(currentPlayer);
+			addPlayer.setCurrentPos(boxNum);
+			addPlayer.setCol(col);
+			addPlayer.setRow(row);
+		}else {
+			addPlayerToNode(currentPlayer.getNext(), addPlayer, boxNum, row, col);
+		}
+	}
+
+	private Player searchPlayerInCol(MatrixNode current, int cellsToMove) {
+		Player searched = null;
+		if(current != null) {
+			if(current.getFirstPlayer() != null) {
+				
+				searched = searchPlayerInLinkedPlayer(current.getFirstPlayer());
+			}
+			if(searched == null) {
+				return searchPlayerInCol(current.getNext(), cellsToMove);
+			}
+		}
+		return searched;
+	}
+
+	private Player searchPlayerInRow(MatrixNode current, int cellsToMove) {
+		Player searched = null;
+		if(current != null) {
+			searched = searchPlayerInCol(current, cellsToMove);
+			if(searched == null) {
+				searched = searchPlayerInRow(current.getUp(), cellsToMove);
+			}
+		}
+		return searched;
+	}
+	
+	
+
+	private Player searchPlayerInLinkedPlayer(Player currentPlayer) {
+		Player searched = null;
+		if(currentPlayer != null) {
+			if(currentPlayer.getTurn() == playerTurn) {
+				searched = currentPlayer;
+			}
+			if(searched == null) {
+				return searchPlayerInLinkedPlayer(currentPlayer.getNext());
+			}	
+		}
+		return searched;
+	}
+
+	public void addPlayerToCell() {
+		
+	}
+
+	public MatrixNode getFirst() {
+		return first;
+	}
+
+	public void setFirst(MatrixNode first) {
+		this.first = first;
+	}
+	
+	
 }
