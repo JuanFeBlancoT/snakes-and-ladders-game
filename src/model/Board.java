@@ -220,6 +220,7 @@ public class Board {
 				current.setG(102);
 				current.setB(88);
 				MatrixNode pair = searchMatrixNode(currentPosLinked.getPairNum());
+				current.setExitPair(pair);
 				pair.setIdentifier(snakesAlphabeticEnum);
 				pair.setR(245);
 				pair.setG(157);
@@ -234,6 +235,7 @@ public class Board {
 				current.setG(115);
 				current.setB(250);
 				MatrixNode pair = searchMatrixNode(currentPosLinked.getPairNum());
+				current.setExitPair(pair);
 				pair.setNumericIdentifier(laddersEnumeration);
 				pair.setR(127);
 				pair.setG(208);
@@ -485,8 +487,12 @@ public class Board {
 			finalPos = rows*cols;
 		}
 		
-		MatrixNode actualPlayerNode = searchMatrixNode(player.getCurrentPos());
+		MatrixNode actualPlayerNode = searchMatrixNode(player.getCurrentPos());		
 		MatrixNode playerDestination = searchMatrixNode(finalPos);
+		if(playerDestination.getExitPair() != null) {
+			System.out.println("HAS A PAIR");
+			playerDestination = searchMatrixNode(playerDestination.getExitPair().getBoxNumber());
+		}
 		
 		//eliminate player from actual node
 		if(actualPlayerNode.getPlayersInCell() > 1) {
