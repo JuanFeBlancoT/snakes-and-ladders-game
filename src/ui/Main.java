@@ -34,6 +34,7 @@ public class Main extends PApplet{
 	public void draw() {
 		background(40);
 		menu.drawScene(this);
+		menu.getGameController().getBoard().moveTable(globalPosX, globalPosY);
 	}
 		
 	public void mouseWheel(MouseEvent event) {
@@ -53,7 +54,6 @@ public class Main extends PApplet{
 				globalPosY = 0;
 			}
 			menu.getGameController().getBoard().moveTable(globalPosX, globalPosY);
-			//getBoard().moveTable(globalPosX, globalPosY);
 		}
 	}
 	
@@ -82,7 +82,7 @@ public class Main extends PApplet{
 			menu.getGameController().getBoard().createSymbolslist();
 			//menu.getGameController().getBoard().createBoardPositionLinkedList(3,3);
 			menu.getGameController().createBoard(4, 7);
-			menu.getGameController().getBoard().createSpecialCells(2, 2, 4, 7);
+			menu.getGameController().getBoard().createSpecialCells(0, 0, 4, 7);
 			menu.getGameController().getBoard().createInitialPlayers(9);
 			//menu.getGameController().getBoard().createSnakePositions(0,2, 3, 3);
 			//menu.getGameController().getBoard().createLaddersPoistions(0,2, 3, 3);

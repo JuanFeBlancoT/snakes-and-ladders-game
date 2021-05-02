@@ -207,7 +207,22 @@ public class Board {
 		if(current != null) {
 			current.setGlobalPX(globalPosX);
 			current.setGlobalPY(globalPosY);
+			updatePlayerPosition(current, globalPosX, globalPosY);
 			updateColPositoins(current.getNext(), globalPosX, globalPosY);
+		}
+	}
+	
+	private void updatePlayerPosition(MatrixNode current, int gpx, int gpy) {
+		if(current.getFirstPlayer() != null) {
+			updatePlayerPosition(current.getFirstPlayer(), gpx, gpy);
+		}
+	}
+
+	private void updatePlayerPosition(Player currentPlayer, int gpx, int gpy) {
+		if(currentPlayer != null) {
+			currentPlayer.setGlobalPosX(gpx);
+			currentPlayer.setGlobalPosY(gpy);
+			updatePlayerPosition(currentPlayer.getNext(), gpx, gpy);
 		}
 	}
 
