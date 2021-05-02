@@ -23,8 +23,10 @@ public class Player {
 	
 	private Player next;
 	private Player prev;
+	//binary tree
 	private Player left;
 	private Player right;
+	private Player parent;
 	
 	public Player(int row, int col, int px, int py, String s, int t, int mov, int gr, int gc, int pm, int snks, int lads) {
 		gameRows = gr;
@@ -58,6 +60,14 @@ public class Player {
 	}
 	
 	
+	public Player getParent() {
+		return parent;
+	}
+
+	public void setParent(Player parent) {
+		this.parent = parent;
+	}
+
 	public int getScore() {
 		return score;
 	}

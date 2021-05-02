@@ -82,6 +82,20 @@ public class Menu {
 			app.text("Congratulations", 400, 400);
 			app.textSize(20);
 			app.text(gameController.getActualWinner().toString(), 20, 500);
+			
+			app.fill(220);
+			app.rect(400, 780, 400, 80);
+			app.fill(40);
+			app.text("Back to menu", (width/2)-60, 825);
+			break;
+		case 5:
+			gameController.drawWinners(app);
+			app.textSize(30);
+			app.fill(0);
+			app.rect(0, 0, 1200, 80);
+			app.fill(255);
+			app.text("Winners", 550, 50);
+			
 			break;
 		}
 	}

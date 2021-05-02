@@ -2,10 +2,13 @@ package model;
 
 import java.util.Random;
 
+import processing.core.PApplet;
+
 public class GameController {
 	
 	//attributes
 	private boolean gameWon;
+	private int globalPosY;
 	
 	//relations
 	private Board board;
@@ -24,6 +27,7 @@ public class GameController {
 	* @param m Number of columns that the board will have.
 	*/
 	public void createBoard(int n, int m) {
+		board = new Board();
 		board.createMatrix(n,m);
 	}
 	
@@ -60,12 +64,14 @@ public class GameController {
 		if(newPlayer.getScore() >= current.getScore()) {
 			if(current.getLeft() == null) {
 				current.setLeft(newPlayer);
+				newPlayer.setParent(current);
 			}else {
 				addPlayerToTree(current.getLeft(), newPlayer);
 			}
 		}else {
 			if(current.getRight() == null) {
 				current.setRight(newPlayer);
+				newPlayer.setParent(current);
 			}else {
 				addPlayerToTree(current.getRight(), newPlayer);
 			}
@@ -93,6 +99,35 @@ public class GameController {
 	public void setActualWinner(Player actualWinner) {
 		this.actualWinner = actualWinner;
 	}
+
+	public void drawWinners(PApplet app) {
+	
+		int baseX = 50;
+		int baseY = 110;
+		
+		if(rootWinner != null) {
+			drawWinners(rootWinner, baseX, baseY, app);
+		}
+	}
+
+	private void drawWinners(Player root, int bx, int by, PApplet app) {
+		if(root != null) {
+			drawWinners(root.getLeft(), bx, by+70, app);
+			app.textSize(20);
+			app.text(root.toString(), bx, by+globalPosY);
+			app.rect(bx, by+40+globalPosY, 1100, 2);
+			drawWinners(root.getRight(), bx, by+100, app);
+		}
+	}
+
+	public void setBoard(Board board) {
+		this.board = board;
+	}
+
+	public void moveWinners(int globalPosY) {
+		this.globalPosY = globalPosY;
+	}
+
 	
 	
 }

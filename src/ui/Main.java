@@ -34,7 +34,9 @@ public class Main extends PApplet{
 	public void draw() {
 		background(40);
 		menu.drawScene(this);
-		menu.getGameController().getBoard().moveTable(globalPosX, globalPosY);
+		if(menu.getGameController().getBoard() != null) {
+			menu.getGameController().getBoard().moveTable(globalPosX, globalPosY);
+		}
 	}
 		
 	public void mouseWheel(MouseEvent event) {
@@ -55,6 +57,13 @@ public class Main extends PApplet{
 			}
 			menu.getGameController().getBoard().moveTable(globalPosX, globalPosY);
 		}
+		
+		if(menu.getScreen() == 5) {
+			
+			float e = event.getCount();
+			globalPosY+=(int)e*15;
+			menu.getGameController().moveWinners(globalPosY);
+		}
 	}
 	
 	public void mousePressed() {
@@ -70,6 +79,7 @@ public class Main extends PApplet{
 		
 		if(menu.getScreen() == 1 && mouseX > (WIDTH/2)-200 && mouseX < (WIDTH/2)+200 && mouseY > (HEIGHT/2)-25 && mouseY < (HEIGHT/2)+55) {
 			System.out.println("btn winners");
+			menu.setScreen(5);
 		}
 		
 		if(menu.getScreen() == 1 && mouseX > (WIDTH/2)-200 && mouseX < (WIDTH/2)+200 && mouseY > HEIGHT-275 && mouseY < HEIGHT-195) {
@@ -79,24 +89,30 @@ public class Main extends PApplet{
 		//screen 2
 		if(menu.getScreen() == 2 && mouseX > (WIDTH/2)-200 && mouseX < (WIDTH/2)+200 && mouseY > (HEIGHT/2)-25 && mouseY < (HEIGHT/2)+55) {
 			System.out.println("start");
+			menu.getGameController().createBoard(3, 3);
 			menu.getGameController().getBoard().createSymbolslist();
-			//menu.getGameController().getBoard().createBoardPositionLinkedList(3,3);
-			menu.getGameController().createBoard(4, 7);
-			menu.getGameController().getBoard().createSpecialCells(0, 0, 4, 7);
+			menu.getGameController().getBoard().createSpecialCells(0, 0, 3, 3);
 			menu.getGameController().getBoard().createInitialPlayers(9);
-			//menu.getGameController().getBoard().createSnakePositions(0,2, 3, 3);
-			//menu.getGameController().getBoard().createLaddersPoistions(0,2, 3, 3);
 			menu.getGameController().getBoard().asignSnakesAndLadders();
 			menu.setScreen(3);
 		}
-		
-		if(menu.getScreen() == 3) {
+		//menu.getGameController().setCanMove(true);
+		if(menu.getScreen() == 3 && mouseX > 1100 && mouseX < 1170 && mouseY > 805 && mouseY < 875) {
+			
 			menu.getGameController().movePlayer();
 			
 			if(menu.getGameController().isGameWon()) {
 				menu.setScreen(4);
 			}
 		}
+		
+		if(menu.getScreen() == 4 && mouseX > 400 && mouseX < 800 && mouseY > 780 && mouseY < 860) {
+			menu.setScreen(1);
+			menu.getGameController().setBoard(null);
+			globalPosX = 0;
+			globalPosY = 0;
+		}
+		
 	}
 	
 }
