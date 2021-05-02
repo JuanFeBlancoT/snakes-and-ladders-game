@@ -3,8 +3,6 @@ package model;
 import processing.core.PApplet;
 import java.util.Random;
 
-import javax.print.attribute.standard.Destination;
-
 public class Board {
 	
 	//constants
@@ -15,6 +13,16 @@ public class Board {
 	public final static int LADDER_ENTRANCE = 3;
 	public final static int LADDER_EXIT = 4;
 	
+	public final static String SYMBOL1 ="*";
+	public final static String SYMBOL2 ="!";
+	public final static String SYMBOL3 ="°";
+	public final static String SYMBOL4 ="X";
+	public final static String SYMBOL5 ="%";
+	public final static String SYMBOL6 ="$";
+	public final static String SYMBOL7 ="#";
+	public final static String SYMBOL8 ="+";
+	public final static String SYMBOL9 ="&";
+	
 	//attributes
 	private int rows,cols;
 	private int givenPX, givenPY, givenNum;
@@ -22,13 +30,19 @@ public class Board {
 	
 	private char snakesAlphabeticEnum;
 	private int laddersEnumeration;
+	private int snakesInGame;
+	private int laddersInGame;
 	private int numberPlayers;
 	private int playerTurn;
+	
+	private boolean gameWon;
 	
 	//relations	
 	private MatrixNode first;
 	private BoardPosLinkedList head;
 	private Random rndm;
+	private Player winner;
+	private SymbolinkedNode firstSymbol;
 	
 	public Board() {
 		rows = 0;
@@ -197,6 +211,54 @@ public class Board {
 		}
 	}
 
+	public void createSymbolslist() {
+		int positionInList = 0;
+		if(firstSymbol == null) {
+			firstSymbol = new SymbolinkedNode(positionInList, SYMBOL1);
+			System.out.println(firstSymbol.toString());
+		}
+		createSymbolslist(firstSymbol, positionInList+1 , 9);
+	}
+	
+	private void createSymbolslist(SymbolinkedNode current, int created, int positionInList) {
+		SymbolinkedNode newSymbol = null;
+		if(created < positionInList) {
+			
+			
+			System.out.println("CREATED: "+created);
+			switch (created) {
+			case 1:
+				newSymbol = new SymbolinkedNode(created, SYMBOL2);
+				break;
+			case 2:
+				newSymbol = new SymbolinkedNode(created, SYMBOL3);
+				break;
+			case 3:
+				newSymbol = new SymbolinkedNode(created, SYMBOL4);
+				break;
+			case 4:
+				newSymbol = new SymbolinkedNode(created, SYMBOL5);
+				break;
+			case 5:
+				newSymbol = new SymbolinkedNode(created, SYMBOL6);
+				break;
+			case 6:
+				newSymbol = new SymbolinkedNode(created, SYMBOL7);
+				break;
+			case 7:
+				newSymbol = new SymbolinkedNode(created, SYMBOL8);
+				break;
+			case 8:
+				newSymbol = new SymbolinkedNode(created, SYMBOL9);
+				break;
+			}
+			current.setNext(newSymbol);
+		}
+		if(newSymbol != null) {
+			createSymbolslist(current.getNext(), created+1, positionInList);
+		}
+	}
+
 	public void asignSnakesAndLadders() {
 		asignToRow(first, head);
 	}
@@ -301,6 +363,8 @@ public class Board {
 	}
 	
 	public void createSpecialCells(int requiredSnakes, int requiredLadders, int n, int m) {
+		snakesInGame = requiredSnakes;
+		laddersInGame = requiredLadders;
 		attempts = 0;
 		createBoardPositionLinkedList(n,m);
 		//System.out.println("Entrada Serp: "+availabaleSnakesEntrances+". Salida serp: "+availableSnakesExits+". Entrada esca: "+availableLadderEntrances+". Salida esca: "+availabeLadderExits);
@@ -450,8 +514,13 @@ public class Board {
 		int currentP = 0;
 		int px = 10;
 		int py = ((rows-1)*80)+10;  
+		
+		//symbol selection		
+		String symbolToAsign = asignSymbol();
+		//	
+		
 		if(currentP < p) {
-			Player player = new Player(first.getRow(), first.getCol(), px, py, "!", currentP+1, 0);
+			Player player = new Player(first.getRow(), first.getCol(), px, py, symbolToAsign, currentP+1, 0, rows, cols, numberPlayers, snakesInGame, laddersInGame);
 			first.setFirstPlayer(player);
 			first.setPlayersInCell(first.getPlayersInCell()+1);
 			createInitialPlayers(player, currentP+1, p, px+20,py);
@@ -459,15 +528,51 @@ public class Board {
 		playerTurn = rndm.nextInt(numberPlayers-1)+1;
 	}
 	
+	private String asignSymbol() {
+		int pos = rndm.nextInt(9);		
+		SymbolinkedNode symbolX = searchSymbol(pos);
+		
+		if(!symbolX.isTaken()) {
+			symbolX.setTaken(true);
+			return symbolX.getSymbol();
+			
+		}else {
+			return asignSymbol();
+		}
+		
+	}
+
+	private SymbolinkedNode searchSymbol(int pos) {
+
+		SymbolinkedNode searched = null;
+		if(firstSymbol != null) {
+			searched = searchSymbol(pos, firstSymbol);
+		}
+		return searched;
+		
+	}
+
+	private SymbolinkedNode searchSymbol(int pos, SymbolinkedNode current) {
+		if(current != null && current.getPositionInList() == pos) {
+			return current;
+		}
+		if(current.getNext() != null) {
+			return searchSymbol(pos, current.getNext());
+		}
+		return current;
+	}
+
 	private void createInitialPlayers(Player current, int currentP, int p, int px, int py) {
-		System.out.println(currentP);
+		
 		if(current != null && currentP < p) {
 			if(px >= 80) {
 				px = 10;
 				py+=22;
 			}
-			System.out.println("px: "+px);
-			Player player = new Player(first.getRow(), first.getCol(), px, py, "!", currentP+1, 0);
+			
+			String symbolToAsign = asignSymbol();
+			
+			Player player = new Player(first.getRow(), first.getCol(), px, py, symbolToAsign, currentP+1, 0, rows, cols, numberPlayers, snakesInGame, laddersInGame);
 			current.setNext(player);
 			player.setPrev(current);
 			first.setPlayersInCell(first.getPlayersInCell()+1);
@@ -482,15 +587,19 @@ public class Board {
 		}
 		
 		int finalPos = player.getCurrentPos()+cellsToMove;
+		player.setMovs(player.getMovs()+1);
+		System.out.println("movs"+player.getMovs());
 		
-		if(finalPos > rows*cols) {
+		if(finalPos >= rows*cols) {
 			finalPos = rows*cols;
+			player.setScore(rows*cols*player.getMovs());
+			winner = player;
+			gameWon = true;
 		}
 		
 		MatrixNode actualPlayerNode = searchMatrixNode(player.getCurrentPos());		
 		MatrixNode playerDestination = searchMatrixNode(finalPos);
 		if(playerDestination.getExitPair() != null) {
-			System.out.println("HAS A PAIR");
 			playerDestination = searchMatrixNode(playerDestination.getExitPair().getBoxNumber());
 		}
 		
@@ -524,7 +633,7 @@ public class Board {
 		String sp = player.getSymbol();
 		int movp = player.getMovs();
 		
-		Player movedPlayer = new Player(rowP, colP, pxp, pyp, sp, tp, movp);
+		Player movedPlayer = new Player(rowP, colP, pxp, pyp, sp, tp, movp, rows, cols, numberPlayers, snakesInGame, laddersInGame);
 
 		System.out.println("player o: "+player.getCol()+","+player.getRow());
 		System.out.println("px: "+player.getPosX()+". py: "+player.getPosY());
@@ -624,6 +733,18 @@ public class Board {
 
 	public void setFirst(MatrixNode first) {
 		this.first = first;
+	}
+
+	public boolean isGameWon() {
+		return gameWon;
+	}
+
+	public void setGameWon(boolean gameWon) {
+		this.gameWon = gameWon;
+	}
+
+	public Player getWinner() {
+		return winner;
 	}
 	
 	

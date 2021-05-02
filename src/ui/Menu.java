@@ -74,6 +74,14 @@ public class Menu {
 			app.fill(40);
 			app.text("Throw \n dice", 1115, 835);
 			app.stroke(40);
+			
+			break;
+		case 4:
+			app.textSize(50);
+			app.fill(255);
+			app.text("Congratulations", 400, 400);
+			app.textSize(20);
+			app.text(gameController.getActualWinner().toString(), 20, 500);
 			break;
 		}
 	}

@@ -1,7 +1,5 @@
 package model;
 
-import javax.naming.InitialContext;
-
 import processing.core.PApplet;
 
 public class Player {
@@ -17,10 +15,24 @@ public class Player {
 	private String nickName;			//Nickname of the player, required for the winners table (menu option 2)
 	private int turn, currentPos;
 	
+	private int gameRows;
+	private int gameCols;
+	private int gameSnakes;
+	private int gameLadders;
+	private int playersInMatch;
+	
 	private Player next;
 	private Player prev;
+	private Player left;
+	private Player right;
 	
-	public Player(int row, int col, int px, int py, String s, int t, int mov) {
+	public Player(int row, int col, int px, int py, String s, int t, int mov, int gr, int gc, int pm, int snks, int lads) {
+		gameRows = gr;
+		gameCols = gc;
+		playersInMatch = pm;
+		gameSnakes = snks;
+		gameLadders = lads;		
+		
 		currentPos = 1;
 		score = 0;
 		movs = mov;
@@ -41,11 +53,43 @@ public class Player {
 		app.circle(posX+globalPosX, posY+globalPosY, size);
 		app.textSize(14);
 		app.fill(0);
-		app.text(turn, (posX+globalPosX)-5, posY+globalPosY+5);
+		app.text(symbol, (posX+globalPosX)-5, posY+globalPosY+5);
 		app.stroke(80);
 	}
 	
 	
+	public int getScore() {
+		return score;
+	}
+
+	public void setScore(int score) {
+		this.score = score;
+	}
+
+	public String getNickName() {
+		return nickName;
+	}
+
+	public void setNickName(String nickName) {
+		this.nickName = nickName;
+	}
+
+	public Player getLeft() {
+		return left;
+	}
+
+	public void setLeft(Player left) {
+		this.left = left;
+	}
+
+	public Player getRight() {
+		return right;
+	}
+
+	public void setRight(Player right) {
+		this.right = right;
+	}
+
 	public int getMovs() {
 		return movs;
 	}
@@ -142,5 +186,7 @@ public class Player {
 		this.symbol = symbol;
 	}
 	
-	
+	public String toString() {
+		return "Symbol: "+symbol+". Nickname: "+nickName+". Score: "+score+".\nRows in board: "+gameRows+". Columns in board: "+gameCols+". Snakes in game: "+gameSnakes+". Ladders in game: "+gameLadders+". Players in game: "+playersInMatch;
+	}
 }
