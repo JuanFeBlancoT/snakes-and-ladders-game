@@ -9,6 +9,11 @@ public class GameController {
 	//attributes
 	private boolean gameWon;
 	private int globalPosY;
+	private int yW;
+	private boolean canPress;
+	
+	private int diceNum;
+	private String playerSymbol;
 	
 	//relations
 	private Board board;
@@ -17,6 +22,7 @@ public class GameController {
 	
 	public GameController() {
 		board = new Board();
+		canPress = true;
 	}
 	
 	/**
@@ -41,25 +47,31 @@ public class GameController {
 		return board;
 	}
 	
-	public void movePlayer() {
+	public void movePlayer(PApplet app) {
+		
 		int die = throwDie();
-		board.movePlayer(die);
+		playerSymbol = board.movePlayer(die);
+		diceNum = die;
+		
 		gameWon = board.isGameWon();
-		if(gameWon) {
-			Player winner = board.getWinner();
-			addPlayerToTree(winner);
-			actualWinner = winner;
-		}
+	}
+	
+	public void setWinner(String name) {
+		Player winner = board.getWinner();
+		winner.setNickName(name);
+		actualWinner = winner;
+		addPlayerToTree(winner);
 	}
 	
 	private void addPlayerToTree(Player winner) {
+
 		if(rootWinner == null) {
 			rootWinner = winner;
 		}else {
 			addPlayerToTree(rootWinner, winner);
 		}
 	}
-	
+		
 	private void addPlayerToTree(Player current, Player newPlayer) {
 		if(newPlayer.getScore() >= current.getScore()) {
 			if(current.getLeft() == null) {
@@ -101,7 +113,7 @@ public class GameController {
 	}
 
 	public void drawWinners(PApplet app) {
-	
+		yW = 70;	
 		int baseX = 50;
 		int baseY = 110;
 		
@@ -111,11 +123,14 @@ public class GameController {
 	}
 
 	private void drawWinners(Player root, int bx, int by, PApplet app) {
+		yW+=40;
 		if(root != null) {
+			yW+=40;
 			drawWinners(root.getLeft(), bx, by+70, app);
 			app.textSize(20);
-			app.text(root.toString(), bx, by+globalPosY);
-			app.rect(bx, by+40+globalPosY, 1100, 2);
+			app.text(root.toString(), bx, yW+globalPosY);
+			app.rect(bx, yW+40+globalPosY, 1100, 2);
+			yW+=40;
 			drawWinners(root.getRight(), bx, by+100, app);
 		}
 	}
@@ -128,6 +143,32 @@ public class GameController {
 		this.globalPosY = globalPosY;
 	}
 
-	
+	public boolean isCanPress() {
+		return canPress;
+	}
+
+	public void setCanPress(boolean canPress) {
+		this.canPress = canPress;
+	}
+
+	public void activateSimulation(PApplet app) throws InterruptedException {
+		
+		if(actualWinner == null) {
+			Thread.sleep(2000);
+			movePlayer(app);
+		}
+		if(actualWinner == null) {
+			
+			activateSimulation(app);
+		}
+	}
+
+	public int getDiceNum() {
+		return diceNum;
+	}
+
+	public String getPlayerSymbol() {
+		return playerSymbol;
+	}	
 	
 }

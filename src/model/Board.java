@@ -230,7 +230,7 @@ public class Board {
 		int positionInList = 0;
 		if(firstSymbol == null) {
 			firstSymbol = new SymbolinkedNode(positionInList, SYMBOL1);
-			System.out.println(firstSymbol.toString());
+			
 		}
 		createSymbolslist(firstSymbol, positionInList+1 , 9);
 	}
@@ -239,8 +239,6 @@ public class Board {
 		SymbolinkedNode newSymbol = null;
 		if(created < positionInList) {
 			
-			
-			System.out.println("CREATED: "+created);
 			switch (created) {
 			case 1:
 				newSymbol = new SymbolinkedNode(created, SYMBOL2);
@@ -291,7 +289,7 @@ public class Board {
 			BoardPosLinkedList currentPosLinked = searchBoardPosition(numberBox);
 			
 			if(currentPosLinked.getType() == SNAKE_ENTRANCE) {
-				System.out.println("SNAKE");
+			
 				current.setIdentifier(snakesAlphabeticEnum);
 				current.setR(245);
 				current.setG(102);
@@ -303,10 +301,8 @@ public class Board {
 				pair.setG(157);
 				pair.setB(105);	
 				snakesAlphabeticEnum++;
-			}else if(currentPosLinked.getType() == SNAKE_EXIT) {
-				
 			}else if(currentPosLinked.getType() == LADDER_ENTRANCE) {
-				System.out.println("LADDER");
+				
 				current.setNumericIdentifier(laddersEnumeration);
 				current.setR(99);
 				current.setG(115);
@@ -318,12 +314,7 @@ public class Board {
 				pair.setG(208);
 				pair.setB(250);	
 				laddersEnumeration++;
-			}else if(currentPosLinked.getType() == LADDER_EXIT) {
-				
-			}else {
-				
-			}
-			
+			}			
 			
 			asignToCol(current.getNext(), firstLinked);
 		}
@@ -362,7 +353,7 @@ public class Board {
 	public void createBoardPositionLinkedList(int n, int m) {		
 		int num = n*m;
 		head = new BoardPosLinkedList(1);
-		System.out.println(1);
+	
 		createBoardPositionLinkedList(head,2,num);
 	
 	}
@@ -370,7 +361,7 @@ public class Board {
 	
 	private void createBoardPositionLinkedList(BoardPosLinkedList current, int currentNum, int endNum) {
 		if(currentNum<=endNum) {
-			System.out.println(currentNum);
+
 			BoardPosLinkedList nextNode = new BoardPosLinkedList(currentNum);
 			current.setNext(nextNode);
 			createBoardPositionLinkedList(nextNode, currentNum+1, endNum);
@@ -382,7 +373,6 @@ public class Board {
 		laddersInGame = requiredLadders;
 		attempts = 0;
 		createBoardPositionLinkedList(n,m);
-		//System.out.println("Entrada Serp: "+availabaleSnakesEntrances+". Salida serp: "+availableSnakesExits+". Entrada esca: "+availableLadderEntrances+". Salida esca: "+availabeLadderExits);
 		createSnakePositions(0, requiredSnakes, n, m, requiredLadders);
 		attempts = 0;
 		createLaddersPoistions(0, requiredLadders, n, m, requiredSnakes);
@@ -416,10 +406,6 @@ public class Board {
 				
 				if(!posNodeExit.isTaken()) {
 					attempts++;
-					System.out.println("Snakes attempts:"+attempts);
-					
-					System.out.println(posEntrance);
-					System.out.println(posExit);
 					
 					posNodeEntrance.setType(SNAKE_ENTRANCE);
 					posNodeEntrance.setTaken(true);
@@ -428,7 +414,7 @@ public class Board {
 					posNodeExit.setType(SNAKE_EXIT);
 					posNodeExit.setTaken(true);
 					currentNumSnakes++;
-					System.out.println("Done snake"+"\n");
+					
 				}
 			}
 			if(attempts<100) {
@@ -465,10 +451,9 @@ public class Board {
 				}else {
 					
 					int reducedEntrance = reduceEntranceNum(posEntrance, m);
-					System.out.println("REDUCED E: "+reducedEntrance);
+					
 					int minExitPos = (m-reducedEntrance)+1;
 					int posExitMin = minExitPos + posEntrance;
-					System.out.println("mini: "+minExitPos+".....posEn: "+posEntrance+"...posExitMin: "+posExitMin);
 					
 					posExit = rndm.nextInt((n*m)-posExitMin)+posExitMin;
 					attempts++;
@@ -478,10 +463,6 @@ public class Board {
 				
 				if(!posNodeExit.isTaken()) {
 					
-					System.out.println("Ladder attempts:"+attempts);
-					System.out.println(posEntrance);
-					System.out.println(posExit);
-					
 					posNodeEntrance.setType(LADDER_ENTRANCE);
 					posNodeEntrance.setTaken(true);
 					posNodeEntrance.setPairNum(posExit);
@@ -489,7 +470,6 @@ public class Board {
 					posNodeExit.setType(LADDER_EXIT);
 					posNodeExit.setTaken(true);
 					currentLadders++;
-					System.out.println("Done Ladder "+currentLadders+"\n");
 				}
 			}
 			if(attempts<100) {
@@ -595,7 +575,7 @@ public class Board {
 		}
 	}
 	
-	public void movePlayer(int cellsToMove) {
+	public String movePlayer(int cellsToMove) {
 		Player player = null;
 		if(first != null) {
 			player = searchPlayerInRow(first, cellsToMove);
@@ -603,7 +583,6 @@ public class Board {
 		
 		int finalPos = player.getCurrentPos()+cellsToMove;
 		player.setMovs(player.getMovs()+1);
-		System.out.println("movs"+player.getMovs());
 		
 		if(finalPos >= rows*cols) {
 			finalPos = rows*cols;
@@ -650,10 +629,6 @@ public class Board {
 		
 		Player movedPlayer = new Player(rowP, colP, pxp, pyp, sp, tp, movp, rows, cols, numberPlayers, snakesInGame, laddersInGame);
 
-		System.out.println("player o: "+player.getCol()+","+player.getRow());
-		System.out.println("px: "+player.getPosX()+". py: "+player.getPosY());
-		System.out.println("moved "+player.getTurn()+", "+cellsToMove);
-		
 		player = null;
 		
 		//add player to destination node
@@ -663,7 +638,6 @@ public class Board {
 		}else {
 			addPlayerToNode(playerDestination, movedPlayer);
 		}
-		System.out.println(movedPlayer.getCol()+","+movedPlayer.getRow());
 	
 		
 		if(playerTurn < numberPlayers) {
@@ -671,6 +645,8 @@ public class Board {
 		}else {
 			playerTurn = 1;
 		}
+		
+		return movedPlayer.getSymbol();
 	}
 
 	private void addPlayerToNode(MatrixNode currentNode, Player currentPlayer) {
