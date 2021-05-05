@@ -10,7 +10,6 @@ public class GameController {
 	private boolean gameWon;
 	private int globalPosY;
 	private int yW;
-	private boolean canPress;
 	
 	private int diceNum;
 	private String playerSymbol;
@@ -20,13 +19,17 @@ public class GameController {
 	private Player rootWinner;
 	private Player actualWinner;
 	
+	/**
+	* GameController: Class constructor <br>
+	* <b> pre </b> <br>
+	* <b> pos </b> <br>
+	*/
 	public GameController() {
 		board = new Board();
-		canPress = true;
 	}
 	
 	/**
-	* createBoard: It creates a double linked matrix with a given amount of rows and columns from type Board <br>
+	* createBoard: It creates a new board object and calls the method that creates the matrix <br>
 	* <b> pre </b> <br>
 	* <b> pos </b> <br>
 	* @param n Number of rows that the board will have.
@@ -47,6 +50,12 @@ public class GameController {
 		return board;
 	}
 	
+	/**
+	* movePlayer: Calls a method that generates a random number between 1 and 6, then sends that number to another method which moves the player and finally verifies if the game was won in that turn <br>
+	* <b> pre </b> <br>
+	* <b> pos </b> <br>
+	* @param app Reference to PApplet
+	*/
 	public void movePlayer(PApplet app) {
 		
 		int die = throwDie();
@@ -56,6 +65,12 @@ public class GameController {
 		gameWon = board.isGameWon();
 	}
 	
+	/**
+	* setWinner: Obtains the winner Player object from the class board and assigns its nickname, then the winner is added to the winners binary tree <br>
+	* <b> pre </b> <br>
+	* <b> pos </b> <br>
+	* @param name The String containing the nickname of the winner player
+	*/
 	public void setWinner(String name) {
 		Player winner = board.getWinner();
 		winner.setNickName(name);
@@ -63,6 +78,12 @@ public class GameController {
 		addPlayerToTree(winner);
 	}
 	
+	/**
+	* addPlayerToTree: Receives a Player object that is going to be added to a binary tree using recursion <br>
+	* <b> pre </b> <br>
+	* <b> pos </b> <br>
+	* @param winner Player object
+	*/
 	private void addPlayerToTree(Player winner) {
 
 		if(rootWinner == null) {
@@ -71,7 +92,14 @@ public class GameController {
 			addPlayerToTree(rootWinner, winner);
 		}
 	}
-		
+	
+	/**
+	* addPlayerToTree: Receives a Player object that is going to be added to a binary tree using recursion, using the score as criteria <br>
+	* <b> pre </b> <br>
+	* <b> pos </b> <br>
+	* @param current Parent player object
+	* @param newPLayer Player object to be added
+	*/
 	private void addPlayerToTree(Player current, Player newPlayer) {
 		if(newPlayer.getScore() >= current.getScore()) {
 			if(current.getLeft() == null) {
@@ -90,28 +118,65 @@ public class GameController {
 		}
 	}
 
+	/**
+	* throwDie: Generates a random number from 1 to 6 <br>
+	* <b> pre </b> <br>
+	* <b> pos </b> <br>
+	* @return dieNumber The amount of position the player is going to move
+	*/
+	
 	public int throwDie() {
 		Random rnd = new Random();
 		int dieNumber = rnd.nextInt(6)+1;
 		return dieNumber;
 	}
 
+	/**
+	* isGameWon: Gets the boolean that determines if the match was won <br>
+	* <b> pre </b> <br>
+	* <b> pos </b> <br>
+	* @return gameWon Boolean
+	*/
 	public boolean isGameWon() {
 		return gameWon;
 	}
 
+	/**
+	* setGameWon: Sets the boolean that determines if the match was won <br>
+	* <b> pre </b> <br>
+	* <b> pos </b> <br>
+	* @return gameWon Boolean
+	*/
 	public void setGameWon(boolean gameWon) {
 		this.gameWon = gameWon;
 	}
 
+	/**
+	* getActualWinner: Gets the Player object that won the match <br>
+	* <b> pre </b> <br>
+	* <b> pos </b> <br>
+	* @return actualWinner Player object who won the game
+	*/
 	public Player getActualWinner() {
 		return actualWinner;
 	}
 
+	/**
+	* setActualWinner: Sets the Player object that won the match <br>
+	* <b> pre </b> <br>
+	* <b> pos </b> <br>
+	* @param actualWinner Player object who won the game
+	*/
 	public void setActualWinner(Player actualWinner) {
 		this.actualWinner = actualWinner;
 	}
 
+	/**
+	* drawWinners: Renders the winners attributes by using recursion <br>
+	* <b> pre </b> <br>
+	* <b> pos </b> <br>
+	* @param app The reference to PApplet
+	*/
 	public void drawWinners(PApplet app) {
 		yW = 70;	
 		int baseX = 50;
@@ -122,6 +187,15 @@ public class GameController {
 		}
 	}
 
+	/**
+	* drawWinners: Renders the winners information  <br>
+	* <b> pre </b> <br>
+	* <b> pos </b> <br>
+	* @param root Current root Player object on the binary tree
+	* @param bx base horizontal position
+	* @param by base vertical position
+	* @param app Reference to PApplet
+	*/
 	private void drawWinners(Player root, int bx, int by, PApplet app) {
 		yW+=40;
 		if(root != null) {
@@ -135,38 +209,42 @@ public class GameController {
 		}
 	}
 
+	/**
+	* setBoard: Sets the board<br>
+	* <b> pre </b> <br>
+	* <b> pos </b> <br>
+	* @param board The new board
+	*/
 	public void setBoard(Board board) {
 		this.board = board;
 	}
 
+	/**
+	* moveWinners: Updates the vertical position of the winners to simulate a scroll <br>
+	* <b> pre </b> <br>
+	* <b> pos </b> <br>
+	* @param globalPosY The Integer number added to the base position of the players
+	*/
 	public void moveWinners(int globalPosY) {
 		this.globalPosY = globalPosY;
 	}
 
-	public boolean isCanPress() {
-		return canPress;
-	}
-
-	public void setCanPress(boolean canPress) {
-		this.canPress = canPress;
-	}
-
-	public void activateSimulation(PApplet app) throws InterruptedException {
-		
-		if(actualWinner == null) {
-			Thread.sleep(2000);
-			movePlayer(app);
-		}
-		if(actualWinner == null) {
-			
-			activateSimulation(app);
-		}
-	}
-
+	/**
+	* getDiceNum: Gets the number obtain from throwing the dice <br>
+	* <b> pre </b> <br>
+	* <b> pos </b> <br>
+	* @return diceNum Integer between 1 and 6
+	*/
 	public int getDiceNum() {
 		return diceNum;
 	}
-
+	
+	/**
+	* getPlayerSymbol: Gets the current player who's playing symbol <br>
+	* <b> pre </b> <br>
+	* <b> pos </b> <br>
+	* @return playerSymbol String with the player symbol
+	*/
 	public String getPlayerSymbol() {
 		return playerSymbol;
 	}	

@@ -44,6 +44,11 @@ public class Board {
 	private Player winner;
 	private SymbolinkedNode firstSymbol;
 	
+	/**
+	* Board: Class constructor <br>
+	* <b> pre </b> <br>
+	* <b> pos </b> <br>
+	*/
 	public Board() {
 		rows = 0;
 		cols = 0;
@@ -212,12 +217,28 @@ public class Board {
 		}
 	}
 	
+	/**
+	* updatePlayerPosition: It changes the horizontal and vertical position of all players in the board <br>
+	* <b> pre </b> <br>
+	* <b> pos </b> <br>
+	* @param current Is the current node that is being updated.
+	* @param gpx Is an integer that is added to the player horizontal position.
+	* @param gpy Is an integer that is added to the player vertical position.
+	*/
 	private void updatePlayerPosition(MatrixNode current, int gpx, int gpy) {
 		if(current.getFirstPlayer() != null) {
 			updatePlayerPosition(current.getFirstPlayer(), gpx, gpy);
 		}
 	}
 
+	/**
+	* updatePlayerPosition: It changes the horizontal and vertical position of all players in the board <br>
+	* <b> pre </b> <br>
+	* <b> pos </b> <br>
+	* @param currentPlayer Is the current player that is being updated.
+	* @param gpx Is an integer that is added to the player horizontal position.
+	* @param gpy Is an integer that is added to the player vertical position.
+	*/
 	private void updatePlayerPosition(Player currentPlayer, int gpx, int gpy) {
 		if(currentPlayer != null) {
 			currentPlayer.setGlobalPosX(gpx);
@@ -226,6 +247,11 @@ public class Board {
 		}
 	}
 
+	/**
+	* createSymbolslist: It creates the linked list of symbols <br>
+	* <b> pre </b> <br>
+	* <b> pos </b> <br>
+	*/
 	public void createSymbolslist() {
 		int positionInList = 0;
 		if(firstSymbol == null) {
@@ -235,6 +261,14 @@ public class Board {
 		createSymbolslist(firstSymbol, positionInList+1 , 9);
 	}
 	
+	/**
+	* createSymbolslist: It creates the linked list of symbols <br>
+	* <b> pre </b> <br>
+	* <b> pos </b> <br>
+	* @param current Is the current symbol node in the linked list.
+	* @param createf Is an integer that determines how many nodes has been created
+	* @param positionInLinkedList Is an integer that is the position of the crated node within the list
+	*/
 	private void createSymbolslist(SymbolinkedNode current, int created, int positionInList) {
 		SymbolinkedNode newSymbol = null;
 		if(created < positionInList) {
@@ -272,10 +306,22 @@ public class Board {
 		}
 	}
 
+	/**
+	* asignSnakesAndLadders: it creates the snakes and ladders of the board <br>
+	* <b> pre </b> <br>
+	* <b> pos </b> <br>
+	*/
 	public void asignSnakesAndLadders() {
 		asignToRow(first, head);
 	}
 
+	/**
+	* asignSnakesasignToRowAndLadders: it Assigns to each node its corresponding cell type and pair <br>
+	* <b> pre </b> <br>
+	* <b> pos </b> <br>
+	* @param current Is the current MatrixNode in the matrix.
+	* @param firstLinked Is the current node in the BoardPositionLinkedList that would be assigned to the matrix node
+	*/
 	private void asignToRow(MatrixNode current, BoardPosLinkedList firstLinked) {
 		if(current != null) {
 			asignToCol(current, firstLinked);
@@ -283,6 +329,13 @@ public class Board {
 		}
 	}
 
+	/**
+	* asignToCol: it Assigns its cells type and pair to a node recursively on a column <br>
+	* <b> pre </b> <br>
+	* <b> pos </b> <br>
+	* @param current Is the current MatrixNode in the matrix.
+	* @param firstLinked Is the current node in the BoardPositionLinkedList that would be assigned to the matrix node
+	*/
 	private void asignToCol(MatrixNode current, BoardPosLinkedList firstLinked) {
 		if(current != null) {
 			int numberBox = current.getBoxNumber();
@@ -320,12 +373,27 @@ public class Board {
 		}
 	}
 	
+	/**
+	* searchMatrixNode: Searches a MatrixNode by its number <br>
+	* <b> pre </b> <br>
+	* <b> pos </b> <br>
+	* @param numberBox Integer, the number of the searched cell
+	* @return searched Is the searched MatrixNode
+	*/
 	public MatrixNode searchMatrixNode(int numberBox) {
 		MatrixNode searched;
 		searched = searchRow(first, numberBox);
 		return searched;
 	}
 	
+	/**
+	* searchRow: Searches a MatrixNode by its number recursively by row<br>
+	* <b> pre </b> <br>
+	* <b> pos </b> <br>
+	* @param current Current MatrixNode
+	* @param numberBox Integer that is the number of the node searched
+	* @return searched Is the searched MatrixNode
+	*/
 	private MatrixNode searchRow(MatrixNode current, int numberBox) {
 		MatrixNode searched = null;
 		if(current != null) {
@@ -337,6 +405,14 @@ public class Board {
 		return searched;
 	}
 
+	/**
+	* searchCol: Searches a MatrixNode by its number recursively by column<br>
+	* <b> pre </b> <br>
+	* <b> pos </b> <br>
+	* @param current Current MatrixNode
+	* @param numberBox Integer that is the number of the node searched
+	* @return searched Is the searched MatrixNode
+	*/
 	private MatrixNode searchCol(MatrixNode current, int numberBox) {
 		MatrixNode searched = null;
 		if(current != null) {
@@ -350,24 +426,45 @@ public class Board {
 		return searched;
 	}
 
+	/**
+	* createBoardPositionLinkedList: Creates the board position linked list<br>
+	* <b> pre </b> <br>
+	* <b> pos </b> <br>
+	* @param n Integer, number of rows in board
+	* @param m Integer, number of columns in board
+	*/
 	public void createBoardPositionLinkedList(int n, int m) {		
 		int num = n*m;
 		head = new BoardPosLinkedList(1);
-	
 		createBoardPositionLinkedList(head,2,num);
-	
 	}
 	
-	
+	/**
+	* createBoardPositionLinkedList: Creates the board position linked list<br>
+	* <b> pre </b> <br>
+	* <b> pos </b> <br>
+	* @param current BoardPosLinkedList, current node in list
+	* @param currentNum Integer, nodes created
+	* @param endNum Integer, nodes to create
+	*/
 	private void createBoardPositionLinkedList(BoardPosLinkedList current, int currentNum, int endNum) {
 		if(currentNum<=endNum) {
-
+			
 			BoardPosLinkedList nextNode = new BoardPosLinkedList(currentNum);
 			current.setNext(nextNode);
 			createBoardPositionLinkedList(nextNode, currentNum+1, endNum);
 		}
 	}
 	
+	/**
+	* createSpecialCells: Creates sankes and ladders positions<br>
+	* <b> pre </b> <br>
+	* <b> pos </b> <br>
+	* @param requiredSnakes Integer, snakes to create
+	* @param requiredLadders Integer, ladders to create
+	* @param n Integer, rows in board
+	* @param m Integer, columns in board
+	*/
 	public void createSpecialCells(int requiredSnakes, int requiredLadders, int n, int m) {
 		snakesInGame = requiredSnakes;
 		laddersInGame = requiredLadders;
@@ -379,6 +476,16 @@ public class Board {
 		
 	}
 	
+	/**
+	* createSnakePositions: Creates the snakes positions, in and out cells <br>
+	* <b> pre </b> <br>
+	* <b> pos </b> <br>
+	* @param currentNumSnakes Integer, amount of snakes created so far
+	* @param numSnakes Integer, amount of snakes that must be created
+	* @param n Integer, number of rows in the board
+	* @param m Integer, number of columns in the board
+	* @param numLadders Integer, amount of ladders that must be created
+	*/
 	public void createSnakePositions(int currentNumSnakes, int numSnakes, int n, int m, int numLadders) {
 
 		
@@ -428,6 +535,16 @@ public class Board {
 		
 	}
 	
+	/**
+	* createLaddersPoistions: Creates the ladders positions, in and out cells <br>
+	* <b> pre </b> <br>
+	* <b> pos </b> <br>
+	* @param currentLadders Integer, amount of ladders created so far
+	* @param numLadders Integer, amount of ladders that must be created
+	* @param n Integer, number of rows in the board
+	* @param m Integer, number of columns in the board
+	* @param numSnakes Integer, amount of snakes that must be created
+	*/
 	public void createLaddersPoistions(int currentLadders, int numLadders, int n, int m, int numSnakes) {
 		
 		if(currentLadders < numLadders  && attempts < 100) {
@@ -481,6 +598,13 @@ public class Board {
 		}
 	}
 
+	/**
+	* reduceEntranceNum: It takes a number and reduce it to a number between 0 and the amount of columns in the board <br>
+	* <b> pre </b> <br>
+	* <b> pos </b> <br>
+	* @param entranceNum Integer, the number that will be compared and reduced
+	* @param m Integer, amount of columns in the board
+	*/
 	private int reduceEntranceNum(int entranceNum, int m) {
 		if(entranceNum<=m) {
 			return entranceNum;
@@ -490,10 +614,25 @@ public class Board {
 
 	}
 
+	/**
+	* searchBoardPosition: Search a BoardPositionNode<br>
+	* <b> pre </b> <br>
+	* <b> pos </b> <br>
+	* @param posEntrance Integer, the number to search the node
+	* @return The searched BoardPosLinkedList object
+	*/
 	private BoardPosLinkedList searchBoardPosition(int posEntrance) {
 		return searchBoardPosition(head, posEntrance);
 	}
 
+	/**
+	* searchBoardPosition: Search a BoardPositionNode<br>
+	* <b> pre </b> <br>
+	* <b> pos </b> <br>
+	* @param current BoardPosLinkedList in list
+	* @param posEntrance Integer, the number to search the node
+	* @return The searched BoardPosLinkedList object
+	*/
 	private BoardPosLinkedList searchBoardPosition(BoardPosLinkedList current, int posEntrance) {
 		
 		if(current.getNum() == posEntrance) {
@@ -504,6 +643,12 @@ public class Board {
 		
 	}
 	
+	/**
+	* createInitialPlayers: creates initial players <br>
+	* <b> pre </b> <br>
+	* <b> pos </b> <br>
+	* @param p Amount of players to create
+	*/
 	public void createInitialPlayers(int p) {
 		numberPlayers = p;
 		int currentP = 0;
@@ -523,6 +668,12 @@ public class Board {
 		playerTurn = rndm.nextInt(numberPlayers-1)+1;
 	}
 	
+	/**
+	* asignSymbol: Assigns symbols to players randomly <br>
+	* <b> pre </b> <br>
+	* <b> pos </b> <br>
+	* @return String, the player Symbol
+	*/
 	private String asignSymbol() {
 		int pos = rndm.nextInt(9);		
 		SymbolinkedNode symbolX = searchSymbol(pos);
@@ -537,6 +688,13 @@ public class Board {
 		
 	}
 
+	/**
+	* searchSymbol: Search a symbol from the symbol linked list by position <br>
+	* <b> pre </b> <br>
+	* <b> pos </b> <br>
+	* @param pos Integer, the symbol position to search
+	* @return searched SymbolinkedNode, the symbol searched 
+	*/
 	private SymbolinkedNode searchSymbol(int pos) {
 
 		SymbolinkedNode searched = null;
@@ -544,9 +702,16 @@ public class Board {
 			searched = searchSymbol(pos, firstSymbol);
 		}
 		return searched;
-		
 	}
 
+	/**
+	* searchSymbol: Search a symbol from the symbol linked list by position <br>
+	* <b> pre </b> <br>
+	* <b> pos </b> <br>
+	* @param pos Integer, the symbol position to search
+	* @param current SymbolinkedNode, the current symbol in list
+	* @return current SymbolinkedNode, the symbol searched 
+	*/
 	private SymbolinkedNode searchSymbol(int pos, SymbolinkedNode current) {
 		if(current != null && current.getPositionInList() == pos) {
 			return current;
@@ -557,6 +722,16 @@ public class Board {
 		return current;
 	}
 
+	/**
+	* createInitialPlayers: create the initial player of the game <br>
+	* <b> pre </b> <br>
+	* <b> pos </b> <br>
+	* @param current Player, current player
+	* @param currentP Integer, amount of players to create
+	* @param p Integer, created players
+	* @param px Integer, player initial horizontal position
+	* @param py Integer, player initial vertical position
+	*/
 	private void createInitialPlayers(Player current, int currentP, int p, int px, int py) {
 		
 		if(current != null && currentP < p) {
@@ -575,6 +750,13 @@ public class Board {
 		}
 	}
 	
+	/**
+	* movePlayer: Takes a player and moves it <br>
+	* <b> pre </b> <br>
+	* <b> pos </b> <br>
+	* @param cellsToMove Amount of positions to move the player
+	* @return players symbol
+	*/
 	public String movePlayer(int cellsToMove) {
 		Player player = null;
 		if(first != null) {
@@ -649,6 +831,13 @@ public class Board {
 		return movedPlayer.getSymbol();
 	}
 
+	/**
+	* addPlayerToNode: Add a player to a matrix node <br>
+	* <b> pre </b> <br>
+	* <b> pos </b> <br>
+	* @param currentNode Current matrix node
+	* @param currentPlayer Player to add
+	*/
 	private void addPlayerToNode(MatrixNode currentNode, Player currentPlayer) {
 		if(currentNode.getFirstPlayer() == null) {
 			currentNode.setFirstPlayer(currentPlayer);
@@ -662,6 +851,16 @@ public class Board {
 		}
 	}
 
+	/**
+	* addPlayerToNode: Add a player to a matrix node <br>
+	* <b> pre </b> <br>
+	* <b> pos </b> <br>
+	* @param currentPlayer Current player in list
+	* @param addPlayer Player to add
+	* @param boxNum Number of the node
+	* @param row row of the node
+	* @param col column of the node
+	*/
 	private void addPlayerToNode(Player currentPlayer, Player addPlayer, int boxNum, int row, int col) {
 		if(currentPlayer.getNext() == null) {
 			currentPlayer.setNext(addPlayer);
@@ -674,6 +873,14 @@ public class Board {
 		}
 	}
 
+	/**
+	* searchPlayerInCol: Search a player <br>
+	* <b> pre </b> <br>
+	* <b> pos </b> <br>
+	* @param current Current matrix node
+	* @param cellsToMove Amount of positions to move to find the player
+	* @return searched Player searched
+	*/
 	private Player searchPlayerInCol(MatrixNode current, int cellsToMove) {
 		Player searched = null;
 		if(current != null) {
@@ -688,6 +895,14 @@ public class Board {
 		return searched;
 	}
 
+	/**
+	* searchPlayerInRow: Search a player <br>
+	* <b> pre </b> <br>
+	* <b> pos </b> <br>
+	* @param current Current matrix node
+	* @param cellsToMove Amount of positions to move to find the player
+	* @return searched Player searched
+	*/
 	private Player searchPlayerInRow(MatrixNode current, int cellsToMove) {
 		Player searched = null;
 		if(current != null) {
@@ -699,8 +914,13 @@ public class Board {
 		return searched;
 	}
 	
-	
-
+	/**
+	* searchPlayerInLinkedPlayer: Search a player <br>
+	* <b> pre </b> <br>
+	* <b> pos </b> <br>
+	* @param currentPlayer Current player
+	* @return searched Player searched
+	*/
 	private Player searchPlayerInLinkedPlayer(Player currentPlayer) {
 		Player searched = null;
 		if(currentPlayer != null) {
@@ -714,26 +934,52 @@ public class Board {
 		return searched;
 	}
 
-	public void addPlayerToCell() {
-		
-	}
-
+	/**
+	* getFirst: Gets the first node in the board <br>
+	* <b> pre </b> <br>
+	* <b> pos </b> <br>
+	* @return first The first node
+	*/
 	public MatrixNode getFirst() {
 		return first;
 	}
 
+	/**
+	* setFirst: Sets the first node of the board <br>
+	* <b> pre </b> <br>
+	* <b> pos </b> <br>
+	* @param first The new first node
+	*/
 	public void setFirst(MatrixNode first) {
 		this.first = first;
 	}
 
+	/**
+	* isGameWon: Gets the boolean that determines if the match was won <br>
+	* <b> pre </b> <br>
+	* <b> pos </b> <br>
+	* @return gameWon Boolean
+	*/
 	public boolean isGameWon() {
 		return gameWon;
 	}
 
+	/**
+	* setGameWon: Sets the boolean that determines if the match was won <br>
+	* <b> pre </b> <br>
+	* <b> pos </b> <br>
+	* @param gameWon Boolean
+	*/
 	public void setGameWon(boolean gameWon) {
 		this.gameWon = gameWon;
 	}
 
+	/**
+	* getWinner: Gets the winner player object of the board <br>
+	* <b> pre </b> <br>
+	* <b> pos </b> <br>
+	* @return winner The winner player object
+	*/
 	public Player getWinner() {
 		return winner;
 	}

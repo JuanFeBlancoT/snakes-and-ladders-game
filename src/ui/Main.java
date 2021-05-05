@@ -48,17 +48,12 @@ public class Main extends PApplet{
 		
 		if(menu.getScreen() == 3) {
 			float e = event.getCount();
-			if(!scrollType && globalPosX>=0) {
+			if(!scrollType) {
 				globalPosX+=(int)e*15;
 			}
-			if(globalPosX<0) {
-				globalPosX = 0;
-			}
 			
-			if(scrollType && globalPosY>=0){
+			if(scrollType){
 				globalPosY+=(int)e*15;
-			}if(globalPosY<0) {
-				globalPosY = 0;
 			}
 			menu.getGameController().getBoard().moveTable(globalPosX, globalPosY);
 		}
@@ -135,7 +130,6 @@ public class Main extends PApplet{
 		}
 		
 		if(menu.getScreen() == 3 && mouseX > 950 && mouseX < 1050 && mouseY > 805 && mouseY < 875) {
-			menu.getGameController().setCanPress(false);
 			menu.setScreen(6);
 		}
 		
