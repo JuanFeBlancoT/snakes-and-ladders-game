@@ -17,5 +17,16 @@ This program was developed on windows using Java as the programming language and
 It implements a library called processing which is already in the project settings.
 For installing it youll need the IDE mentioned above to run it. 
 
+---
+## Links
+
+Link to the functional requirements:
+https://drive.google.com/drive/u/0/folders/1IJlZUfrcO0QNaYBy7V0fdO17dz0kD4dF
+
+Link to the class diagram:
+https://drive.google.com/drive/u/0/folders/1IJlZUfrcO0QNaYBy7V0fdO17dz0kD4dF
+
+Link to the program documentation:
+file:///C:/ICESI/Cuarto%20semestre/APO2/Ejercicios/snakes-and-ladders/docs/api/index.html
 
 
