@@ -82,6 +82,7 @@ public class Main extends PApplet{
 		
 		if(menu.getScreen() == 1 && mouseX > (WIDTH/2)-200 && mouseX < (WIDTH/2)+200 && mouseY > HEIGHT-275 && mouseY < HEIGHT-195) {
 			System.out.println("btn quit");
+			exit();
 		}
 		
 		//screen 2

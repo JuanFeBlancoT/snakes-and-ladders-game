@@ -140,6 +140,11 @@ public class Menu {
 			app.text("Players in\nboard", 950, 170);
 			app.fill(67,107,86);
 			app.text(players, 960, 255);
+			//
+			app.fill(245);
+			app.text("The number of columns and rows must be greater than 1 each", 370, 600);
+			app.text("The number of snakes and columns must be lower than the half of rows*columns", 310, 620);
+			app.text("The number of players must be from 2 to 9", 440, 640);
 			
 			break;
 		case 3:
