@@ -54,7 +54,7 @@ public class Menu {
 	* <b> pre </b> <br>
 	* <b> pos </b> <br>
 	* @param app Is a reference to the PApplet library
-	 * @throws InterruptedException 
+	* @throws InterruptedException Not sure
 	*/
 	public void drawScene(PApplet app) throws InterruptedException {
 		switch(screen) {

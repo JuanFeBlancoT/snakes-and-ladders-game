@@ -162,7 +162,7 @@ public class MatrixNode {
 	* setNumericIdentifier: Sets the numeric identifier in case the node is a ladder <br>
 	* <b> pre </b> <br>
 	* <b> pos </b> <br>
-	* @return numericIdentifier Integer number that indicates which ladder is paired with another one
+	* @param numericIdentifier Integer number that indicates which ladder is paired with another one
 	*/
 	public void setNumericIdentifier(int numericIdentifier) {
 		this.numericIdentifier = numericIdentifier;
@@ -182,7 +182,7 @@ public class MatrixNode {
 	* setIdentifier: Gets the new char identifier for the snakes <br>
 	* <b> pre </b> <br>
 	* <b> pos </b> <br>
-	* @return identifier Char that indicates which snake is paired with another one
+	* @param identifier Char that indicates which snake is paired with another one
 	*/
 	public void setIdentifier(char identifier) {
 		this.identifier = identifier;
@@ -252,7 +252,7 @@ public class MatrixNode {
 	* setGlobalPY: Sets the global vertical position for using the scroll <br>
 	* <b> pre </b> <br>
 	* <b> pos </b> <br>
-	* @param globalPX Integer that determines the vertical position that will be added to the default position of all objects within the screen
+	* @param globalPY Integer that determines the vertical position that will be added to the default position of all objects within the screen
 	*/
 	public void setGlobalPY(int globalPY) {
 		this.globalPY = globalPY;
@@ -372,7 +372,7 @@ public class MatrixNode {
 	* setBoxNumber: Sets the number of the cell in the board game <br>
 	* <b> pre </b> <br>
 	* <b> pos </b> <br>
-	* @return boxNumber The new cell number
+	* @param boxNumber The new cell number
 	*/
 	public void setBoxNumber(int boxNumber) {
 		this.boxNumber = boxNumber;

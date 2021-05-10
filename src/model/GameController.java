@@ -145,7 +145,7 @@ public class GameController {
 	* setGameWon: Sets the boolean that determines if the match was won <br>
 	* <b> pre </b> <br>
 	* <b> pos </b> <br>
-	* @return gameWon Boolean
+	* @param gameWon Boolean
 	*/
 	public void setGameWon(boolean gameWon) {
 		this.gameWon = gameWon;

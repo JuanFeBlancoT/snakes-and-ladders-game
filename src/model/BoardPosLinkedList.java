@@ -77,7 +77,7 @@ public class BoardPosLinkedList {
 	* setTaken: Sets the boolean value that determines if the position is already taken <br>
 	* <b> pre </b> <br>
 	* <b> pos </b> <br>
-	* @return taken Boolean
+	* @param taken Boolean
 	*/
 	 public void setTaken(boolean taken) {
 		this.taken = taken;

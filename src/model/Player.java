@@ -98,7 +98,7 @@ public class Player {
 	* drawPlayer: Renders the visual representation of a player <br>
 	* <b> pre </b> <br>
 	* <b> pos </b> <br>
-	* @param app Reference to the PApplet library
+	* @param parent Player object parent of this node
 	*/
 	public void setParent(Player parent) {
 		this.parent = parent;
@@ -278,7 +278,7 @@ public class Player {
 	* setGlobalPosX: Sets the global horizontal position <br>
 	* <b> pre </b> <br>
 	* <b> pos </b> <br>
-	* @param glopalPosX New global horizontal position
+	* @param globalPosX New global horizontal position
 	*/
 	public void setGlobalPosX(int globalPosX) {
 		this.globalPosX = globalPosX;
@@ -288,7 +288,7 @@ public class Player {
 	* setGlobalPosY: Sets the global vertical position <br>
 	* <b> pre </b> <br>
 	* <b> pos </b> <br>
-	* @param glopalPosY New global vertical position
+	* @param globalPosY New global vertical position
 	*/
 	public void setGlobalPosY(int globalPosY) {
 		this.globalPosY = globalPosY;
