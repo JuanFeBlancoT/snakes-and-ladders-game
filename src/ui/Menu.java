@@ -171,8 +171,13 @@ public class Menu {
 		case 4:
 			app.textSize(50);
 			app.fill(255);
-			app.text("Congratulations", 400, 200);
-			app.textSize(20);			
+			app.text("Congratulations "+ gameController.getBoard().getWinner().getSymbol(), 400, 200);
+			app.textSize(20);
+			if(gameController.getBoard().getWinner().getMovs() == 1) {
+				app.text("It took you "+ gameController.getBoard().getWinner().getMovs() + " turn to win", 490, 250);
+			}else {
+				app.text("It took you "+ gameController.getBoard().getWinner().getMovs() + " turns to win", 490, 250);
+			}
 			app.fill(220);
 			app.rect(400, 580, 400, 80);
 			app.fill(40);
