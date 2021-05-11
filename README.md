@@ -27,6 +27,6 @@ Link to the class diagram:
 https://drive.google.com/drive/u/0/folders/1IJlZUfrcO0QNaYBy7V0fdO17dz0kD4dF
 
 Link to the program documentation:
-file:///C:/ICESI/Cuarto%20semestre/APO2/Ejercicios/snakes-and-ladders/docs/api/index.html
+https://github.com/JuanFeBlancoT/snakes-and-ladders-game/blob/main/docs/api/index.html
 
 
